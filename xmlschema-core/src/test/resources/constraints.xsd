@@ -1,0 +1,99 @@
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one
+  ~ or more contributor license agreements. See the NOTICE file
+  ~ distributed with this work for additional information
+  ~ regarding copyright ownership. The ASF licenses this file
+  ~ to you under the Apache License, Version 2.0 (the
+  ~ "License"); you may not use this file except in compliance
+  ~ with the License. You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied. See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+  -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:tns="http://soapinterop.org/types"
+        targetNamespace="http://soapinterop.org/types"
+        elementFormDefault="qualified">
+
+  <xsd:element name="constraintTest">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="manufacturers" type="tns:ManufacturerType"/>
+        <xsd:element name="products" type="tns:ProductType"/>
+      </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:unique name="uniqueTest">
+      <xsd:selector xpath="tns:manufacturers/tns:location"/>
+      <xsd:field xpath="@district"/>
+    </xsd:unique>
+    <xsd:unique name="uniqueTest2">
+      <xsd:selector xpath="tns:products/tns:productName"/>
+      <xsd:field xpath="@productId"/>
+    </xsd:unique>
+
+    <xsd:key name="keyTest">
+      <xsd:selector xpath="tns:products/tns:productName"/>
+      <xsd:field xpath="@productId"/>
+    </xsd:key>
+
+    <xsd:keyref name="keyRefTest" refer="tns:keyTest">
+      <xsd:selector xpath="tns:manufacturers/tns:location/tns:productName"/>
+      <xsd:field xpath="@productId"/>
+    </xsd:keyref>
+
+      <xsd:key name="keyTest2">
+          <xsd:selector xpath="tns:products/tns:productName"/>
+          <xsd:field xpath="@productId"/>
+      </xsd:key>
+
+      <xsd:keyref name="keyRefTest2" refer="tns:keyTest2">
+          <xsd:selector xpath="tns:manufacturers/tns:location/tns:productName"/>
+          <xsd:field xpath="@productId"/>
+      </xsd:keyref>
+
+  </xsd:element>
+
+  <xsd:complexType name="ManufacturerType">
+    <xsd:sequence>
+      <xsd:element name="location" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="productName" maxOccurs="unbounded">
+              <xsd:complexType>
+                <xsd:complexContent>
+                  <xsd:extension base="string">
+                    <xsd:attribute name="productId" type="integer"/>
+                    <xsd:attribute name="units" type="integer"/>
+                  </xsd:extension>
+                </xsd:complexContent>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+          <xsd:attribute name="district" type="integer"/>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="ProductType">
+    <xsd:sequence>
+      <xsd:element name="productName" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:simpleContent>
+            <xsd:extension base="string">
+              <xsd:attribute name="productId" type="integer"/>
+            </xsd:extension>
+          </xsd:simpleContent>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+</xsd:schema>
