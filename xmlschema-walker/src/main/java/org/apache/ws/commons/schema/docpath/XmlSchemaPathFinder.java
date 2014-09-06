@@ -1686,19 +1686,8 @@ public final class XmlSchemaPathFinder extends DefaultHandler {
         }
 
         if (!matches) {
-          /* At this time, it is not possible to determine the XmlSchemaAny's
-           * original target namespace without knowing the original element
-           * that owned it.  Likewise, unless the XmlSchemaAny's namespace is
-           * an actual namespace, or ##any, or ##local, there is no way to
-           * validate it.
-           *
-           * The work-around is to use the namespace of the owning element as
-           * the target namespace.
-           */
           if (needTargetNamespace) {
-            final String targetNamespace =
-                elementStack.get(elementStack.size() - 1).getNamespaceURI();
-            validNamespaces.add(targetNamespace);
+            validNamespaces.add( any.getTargetNamespace() );
           }
 
           matches = validNamespaces.contains( elemQName.getNamespaceURI() );

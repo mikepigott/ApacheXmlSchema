@@ -148,7 +148,7 @@ public class TestXmlSchemaPathFinder {
     runTest(xmlSchemaCollection, xmlFile, root);
   }
 
-  private void runTest(File schemaFile, File xmlFile, QName root)
+  private XmlSchemaPathNode runTest(File schemaFile, File xmlFile, QName root)
       throws Exception{
 
     XmlSchemaCollection xmlSchemaCollection = new XmlSchemaCollection();
@@ -164,10 +164,10 @@ public class TestXmlSchemaPathFinder {
       }
     }
 
-    runTest(xmlSchemaCollection, xmlFile, root);
+    return runTest(xmlSchemaCollection, xmlFile, root);
   }
 
-  private void runTest(
+  private XmlSchemaPathNode runTest(
       XmlSchemaCollection xmlSchemaCollection,
       File xmlFile,
       QName root)
@@ -192,5 +192,7 @@ public class TestXmlSchemaPathFinder {
     SaxWalkerOverDom saxWalker = new SaxWalkerOverDom(pathFinder);
 
     saxWalker.walk(xmlDoc);
+
+    return pathFinder.getXmlSchemaTraversal();
   }
 }
