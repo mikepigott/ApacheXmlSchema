@@ -303,7 +303,7 @@ public final class XmlSchemaPathNode<U, V> {
    * @return The next node in the path that this node referred to, as it will
    *         be discarded internally. 
    */
-  final void update(
+  void update(
       Direction newDirection,
       XmlSchemaPathNode newPrevious,
       XmlSchemaDocumentNode<U> newNode) {
@@ -312,7 +312,7 @@ public final class XmlSchemaPathNode<U, V> {
     documentNode = newNode;
   }
 
-  final void update(
+  void update(
       Direction newDirection,
       XmlSchemaPathNode newPrevious,
       XmlSchemaStateMachineNode newStateMachineNode) {

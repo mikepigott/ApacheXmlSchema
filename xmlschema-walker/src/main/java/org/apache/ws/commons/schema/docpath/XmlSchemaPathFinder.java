@@ -264,7 +264,7 @@ public final class XmlSchemaPathFinder extends DefaultHandler {
       return afterStartPathIndex;
     }
 
-    final void set(XmlSchemaPathNode node) {
+    void set(XmlSchemaPathNode node) {
       if (node == null) {
         throw new IllegalArgumentException("DocumentPathNode cannot be null.");
       }
@@ -1465,17 +1465,15 @@ public final class XmlSchemaPathFinder extends DefaultHandler {
 
     // If this is a group, confirm it has children.
     if ( !state.getNodeType().equals(XmlSchemaStateMachineNode.Type.ELEMENT)
-        && !state.getNodeType().equals(XmlSchemaStateMachineNode.Type.ANY) ) {
-
-      if (( state.getPossibleNextStates() == null)
-          || state.getPossibleNextStates().isEmpty()) {
+        && !state.getNodeType().equals(XmlSchemaStateMachineNode.Type.ANY)
+        && ((state.getPossibleNextStates() == null)
+             || state.getPossibleNextStates().isEmpty())) {
 
         throw new IllegalStateException(
             "Group "
             + state.getNodeType()
             + " has no children.  Found when processing "
             + elemQName);
-      }
     }
 
     List<PathSegment> choices = null;
@@ -1673,10 +1671,10 @@ public final class XmlSchemaPathFinder extends DefaultHandler {
           final String[] namespaces = any.getNamespace().trim().split(" ");
           validNamespaces = new ArrayList<String>(namespaces.length);
           for (String namespace : namespaces) {
-            if (namespace.equals("##targetNamespace")) {
+            if ("##targetNamespace".equals(namespace)) {
               needTargetNamespace = true;
 
-            } else if (namespace.equals("##local")
+            } else if ("##local".equals(namespace)
                 && (elemQName.getNamespaceURI() == null)) {
 
               matches = true;

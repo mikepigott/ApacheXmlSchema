@@ -72,10 +72,10 @@ public class TestSaxWalkerOverDom {
       value = new String(v);
     }
 
-    private String namespace;
-    private String localName;
-    private String qName;
-    private String value;
+    String namespace;
+    String localName;
+    String qName;
+    String value;
   }
 
   private static class StackEntry {
@@ -176,8 +176,8 @@ public class TestSaxWalkerOverDom {
             AttrInfo attribute = attributes.get(index);
             str.append("[Attr: namespace=\"").append(attribute.namespace);
             str.append("\", localName=\"").append(attribute.localName);
-            str.append("\", qName=\"").append( attribute.qName);
-            str.append("\", value=\"").append( attribute.value).append("\"] ");
+            str.append("\", qName=\"").append(attribute.qName);
+            str.append("\", value=\"").append(attribute.value).append("\"] ");
           }
         }
 

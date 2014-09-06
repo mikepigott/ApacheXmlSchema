@@ -154,7 +154,12 @@ public final class XmlSchemaDocumentNode<U> {
       if (children.size() == visitors.size()) {
         children.add( new TreeMap<Integer, XmlSchemaDocumentNode<U>>() );
       } else {
-        throw new IllegalStateException("Attempted to add a new visitor when the number of occurrences (" + children.size() + ") did not match the number of existing visitors (" + visitors.size() + ").");
+        throw new IllegalStateException(
+            "Attempted to add a new visitor when the number of occurrences ("
+            + children.size()
+            + ") did not match the number of existing visitors ("
+            + visitors.size()
+            + ").");
       }
     }
 
@@ -244,7 +249,7 @@ public final class XmlSchemaDocumentNode<U> {
     }
   }
 
-  final void set(
+  void set(
       XmlSchemaDocumentNode parent,
       XmlSchemaStateMachineNode stateMachineNode) {
 
