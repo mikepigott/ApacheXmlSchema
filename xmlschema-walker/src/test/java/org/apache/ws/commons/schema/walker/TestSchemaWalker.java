@@ -1,19 +1,20 @@
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
+ * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
+ * regarding copyright ownership. The ASF licenses this file
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
+ * with the License. You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package org.apache.ws.commons.schema.walker;
@@ -913,50 +914,50 @@ public class TestSchemaWalker {
     final HashMap<XmlSchemaRestriction.Type, List<XmlSchemaRestriction>>
     facets = typeInfo.getFacets();
 
-  if ((facets == null) && (nextFacets != null)) {
-    throw new IllegalStateException(
-        "Expected "
-        + nextFacets.size()
-        + " facets for element \""
-        + nextName
-        + "\" but received null facets.");
+    if ((facets == null) && (nextFacets != null)) {
+      throw new IllegalStateException(
+          "Expected "
+          + nextFacets.size()
+          + " facets for element \""
+          + nextName
+          + "\" but received null facets.");
 
-  } else if ((facets != null)
-             && facets.isEmpty()
-             && (nextFacets != null)
-             && !nextFacets.isEmpty()) {
-    throw new IllegalStateException(
-        "Expected "
-        + nextFacets.size()
-        + " facets for element \""
-        + nextName
-        + "\" but found none.");
+    } else if ((facets != null)
+               && facets.isEmpty()
+               && (nextFacets != null)
+               && !nextFacets.isEmpty()) {
+      throw new IllegalStateException(
+          "Expected "
+          + nextFacets.size()
+          + " facets for element \""
+          + nextName
+          + "\" but found none.");
 
-  } else if ((facets != null)
-             && !facets.isEmpty()
-             && (nextFacets != null)
-             && nextFacets.isEmpty()) {
+    } else if ((facets != null)
+               && !facets.isEmpty()
+               && (nextFacets != null)
+               && nextFacets.isEmpty()) {
 
-    throw new IllegalStateException(
-        "Element " + nextName + " has facets, but none were expected.");
-  }
+      throw new IllegalStateException(
+          "Element " + nextName + " has facets, but none were expected.");
+    }
 
-  if (facets != null) {
-    for (Map.Entry<XmlSchemaRestriction.Type, List<XmlSchemaRestriction>>
-         facetsForType : facets.entrySet()) {
+    if (facets != null) {
+      for (Map.Entry<XmlSchemaRestriction.Type, List<XmlSchemaRestriction>>
+           facetsForType : facets.entrySet()) {
 
-      for (XmlSchemaRestriction facet : facetsForType.getValue()) {
-        if (!nextFacets.remove(facet)) {
-          throw new IllegalStateException(
-              "Element \""
-              + nextName
-              + "\" has unexpected facet \""
-              + facet
-              + "\".");
+        for (XmlSchemaRestriction facet : facetsForType.getValue()) {
+          if (!nextFacets.remove(facet)) {
+            throw new IllegalStateException(
+                "Element \""
+                + nextName
+                + "\" has unexpected facet \""
+                + facet
+                + "\".");
+          }
         }
       }
     }
-  }
 
   }
 
