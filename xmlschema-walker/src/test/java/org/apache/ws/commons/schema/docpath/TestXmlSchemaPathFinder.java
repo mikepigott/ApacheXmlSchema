@@ -21,6 +21,9 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileReader;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.SortedMap;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
@@ -32,12 +35,16 @@ import org.apache.ws.commons.schema.XmlSchemaElement;
 import org.apache.ws.commons.schema.resolver.XmlSchemaMultiBaseUriResolver;
 import org.apache.ws.commons.schema.testutils.UtilsForTests;
 import org.apache.ws.commons.schema.walker.XmlSchemaWalker;
+import org.apache.ws.commons.schema.walker.XmlSchemaTypeInfo;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
 public class TestXmlSchemaPathFinder {
+
+  private static final String TESTSCHEMA_NS = "http://avro.apache.org/AvroTest";
+  private static final String COMPLEX_SCHEMA_NS = "urn:avro:complex_schema";
 
   private static DocumentBuilderFactory dbf;
 
@@ -64,7 +71,14 @@ public class TestXmlSchemaPathFinder {
     final File xmlFile =
         UtilsForTests.buildFile("src", "test", "resources", "test1_root.xml");
 
-    runTest(schemaFile, xmlFile, root);
+    XmlSchemaPathNode traversal = runTest(schemaFile, xmlFile, root);
+
+    Map<QName, XmlSchemaTypeInfo.Type> expectedTypes =
+        new HashMap<QName, XmlSchemaTypeInfo.Type>();
+
+    expectedTypes.put(root, XmlSchemaTypeInfo.Type.COMPLEX);
+
+    validate(traversal.getDocumentNode(), expectedTypes);
   }
 
   @Test
@@ -81,7 +95,22 @@ public class TestXmlSchemaPathFinder {
             "resources",
             "test2_children.xml");
 
-    runTest(schemaFile, xmlFile, root);
+    XmlSchemaPathNode traversal = runTest(schemaFile, xmlFile, root);
+
+    Map<QName, XmlSchemaTypeInfo.Type> expectedTypes =
+        new HashMap<QName, XmlSchemaTypeInfo.Type>();
+
+    expectedTypes.put(root, XmlSchemaTypeInfo.Type.COMPLEX);
+
+    expectedTypes.put(
+        new QName(TESTSCHEMA_NS, "primitive"),
+        XmlSchemaTypeInfo.Type.ATOMIC);
+
+    expectedTypes.put(
+        new QName(TESTSCHEMA_NS, "nonNullPrimitive"),
+        XmlSchemaTypeInfo.Type.ATOMIC);
+
+    validate(traversal.getDocumentNode(), expectedTypes);
   }
 
   @Test
@@ -98,7 +127,30 @@ public class TestXmlSchemaPathFinder {
             "resources",
             "test3_grandchildren.xml");
 
-    runTest(schemaFile, xmlFile, root);
+    XmlSchemaPathNode traversal = runTest(schemaFile, xmlFile, root);
+
+    Map<QName, XmlSchemaTypeInfo.Type> expectedTypes =
+        new HashMap<QName, XmlSchemaTypeInfo.Type>();
+
+    expectedTypes.put(root, XmlSchemaTypeInfo.Type.COMPLEX);
+
+    expectedTypes.put(
+        new QName(TESTSCHEMA_NS, "primitive"),
+        XmlSchemaTypeInfo.Type.ATOMIC);
+
+    expectedTypes.put(
+        new QName(TESTSCHEMA_NS, "nonNullPrimitive"),
+        XmlSchemaTypeInfo.Type.ATOMIC);
+
+    expectedTypes.put(
+        new QName(TESTSCHEMA_NS, "map"),
+        XmlSchemaTypeInfo.Type.COMPLEX);
+
+    expectedTypes.put(
+        new QName(TESTSCHEMA_NS, "record"),
+        XmlSchemaTypeInfo.Type.COMPLEX);
+
+    validate(traversal.getDocumentNode(), expectedTypes);
   }
 
   @Test
@@ -145,7 +197,84 @@ public class TestXmlSchemaPathFinder {
       }
     }
 
-    runTest(xmlSchemaCollection, xmlFile, root);
+    XmlSchemaPathNode traversal = runTest(xmlSchemaCollection, xmlFile, root);
+
+    Map<QName, XmlSchemaTypeInfo.Type> expectedTypes =
+        new HashMap<QName, XmlSchemaTypeInfo.Type>();
+
+    expectedTypes.put(
+        new QName(COMPLEX_SCHEMA_NS, "realRoot"),
+        XmlSchemaTypeInfo.Type.COMPLEX);
+
+    expectedTypes.put(
+        new QName(COMPLEX_SCHEMA_NS, "backtrack"),
+        XmlSchemaTypeInfo.Type.COMPLEX);
+
+    expectedTypes.put(
+        new QName(COMPLEX_SCHEMA_NS, "allTheThings"),
+        XmlSchemaTypeInfo.Type.COMPLEX);
+
+    expectedTypes.put(
+        new QName(COMPLEX_SCHEMA_NS, "prohibit"),
+        XmlSchemaTypeInfo.Type.COMPLEX);
+
+    expectedTypes.put(
+        new QName(COMPLEX_SCHEMA_NS, "anyAndFriends"),
+        XmlSchemaTypeInfo.Type.COMPLEX);
+
+    expectedTypes.put(
+        new QName(COMPLEX_SCHEMA_NS, "simpleExtension"),
+        XmlSchemaTypeInfo.Type.UNION);
+
+    expectedTypes.put(
+        new QName(COMPLEX_SCHEMA_NS, "simpleRestriction"),
+        XmlSchemaTypeInfo.Type.UNION);
+
+    expectedTypes.put(
+        new QName(COMPLEX_SCHEMA_NS, "complexExtension"),
+        XmlSchemaTypeInfo.Type.COMPLEX);
+
+    expectedTypes.put(
+        new QName(COMPLEX_SCHEMA_NS, "mixedType"),
+        XmlSchemaTypeInfo.Type.COMPLEX);
+
+    expectedTypes.put(
+        new QName(COMPLEX_SCHEMA_NS, "qName"),
+        XmlSchemaTypeInfo.Type.ATOMIC);
+
+    expectedTypes.put(
+        new QName(COMPLEX_SCHEMA_NS, "avroEnum"),
+        XmlSchemaTypeInfo.Type.ATOMIC);
+
+    expectedTypes.put(
+        new QName(COMPLEX_SCHEMA_NS, "xmlEnum"),
+        XmlSchemaTypeInfo.Type.ATOMIC);
+
+    expectedTypes.put(
+        new QName(COMPLEX_SCHEMA_NS, "unsignedLongList"),
+        XmlSchemaTypeInfo.Type.LIST);
+
+    expectedTypes.put(
+        new QName(COMPLEX_SCHEMA_NS, "listOfUnion"),
+        XmlSchemaTypeInfo.Type.LIST);
+
+    expectedTypes.put(
+        new QName(COMPLEX_SCHEMA_NS, "firstMap"),
+        XmlSchemaTypeInfo.Type.COMPLEX);
+
+    expectedTypes.put(
+        new QName(COMPLEX_SCHEMA_NS, "value"),
+        XmlSchemaTypeInfo.Type.ATOMIC);
+
+    expectedTypes.put(
+        new QName(COMPLEX_SCHEMA_NS, "secondMap"),
+        XmlSchemaTypeInfo.Type.COMPLEX);
+
+    expectedTypes.put(
+        new QName(COMPLEX_SCHEMA_NS, "fixed"),
+        XmlSchemaTypeInfo.Type.ATOMIC);
+
+    validate(traversal.getDocumentNode(), expectedTypes);
   }
 
   private XmlSchemaPathNode runTest(File schemaFile, File xmlFile, QName root)
@@ -194,5 +323,50 @@ public class TestXmlSchemaPathFinder {
     saxWalker.walk(xmlDoc);
 
     return pathFinder.getXmlSchemaTraversal();
+  }
+
+  private void validate(
+      XmlSchemaDocumentNode docNode,
+      Map<QName, XmlSchemaTypeInfo.Type> expectedTypes) {
+
+    for (int iter = 1; iter <= docNode.getIteration(); ++iter) {
+      switch ( docNode.getStateMachineNode().getNodeType() ) {
+      case ANY:
+        break;
+      case ELEMENT:
+        {
+          XmlSchemaStateMachineNode stateMachine =
+              docNode.getStateMachineNode();
+
+          QName elemQName = stateMachine.getElement().getQName();
+
+          XmlSchemaTypeInfo.Type expectedType =
+              expectedTypes.get(elemQName);
+
+          assertNotNull(
+              "No type information found for " + elemQName.toString(),
+              expectedType);
+
+          assertEquals(
+              elemQName.toString(),
+              expectedType,
+              stateMachine.getElementType().getType());
+        }
+        /* falls through */
+      default:
+        {
+          // If it's neither an element nor a wildcard, it's a group.
+          SortedMap<Integer, XmlSchemaDocumentNode> children =
+            docNode.getChildren(iter);
+
+          if (children != null) {
+            for (Map.Entry<Integer, XmlSchemaDocumentNode> child
+                  : children.entrySet()) {
+              validate(child.getValue(), expectedTypes);
+            }
+          }
+        }
+      }
+    }
   }
 }
