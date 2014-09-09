@@ -25,10 +25,5 @@
       <artifactId>xmlunit</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.jvnet.jaxb2_commons</groupId>
-      <artifactId>jaxb2-basics-jaxb-xjc</artifactId>
-      <version>2.2.4-1</version>
-    </dependency>
   </dependencies>
 </project>
