@@ -162,7 +162,7 @@ public final class XmlSchemaNamespaceContext implements NamespacePrefixList {
   public void addNamespace(String prefix, String namespaceUri) {
     if ((prefix == null)
         || (namespaceUri == null)
-        || namespaceUri.isEmpty()) {
+        || (namespaceUri.length() == 0)) {
 
       throw new IllegalArgumentException(
           "The prefix may not be null, and the namespace URI "

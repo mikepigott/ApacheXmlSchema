@@ -849,11 +849,11 @@ public final class XmlSchemaPathFinder extends DefaultHandler {
           && (!elemTypeInfo.getType().equals(XmlSchemaTypeInfo.Type.COMPLEX)
               || elemTypeInfo.isMixed()));
 
-      if (!elemExpectsContent && text.isEmpty()) {
+      if (!elemExpectsContent && (text.length() == 0)) {
         // Nothing to see here.
         return;
 
-      } else if (!elemExpectsContent && !text.isEmpty()) {
+      } else if (!elemExpectsContent && (text.length() > 0)) {
         throw new IllegalStateException(
             "Element "
             + state.getElement().getQName()
@@ -862,7 +862,7 @@ public final class XmlSchemaPathFinder extends DefaultHandler {
             + "\" for it.");
 
       } else if (elemExpectsContent
-                   && text.isEmpty()
+                   && (text.length() == 0)
                    && !state.getElement().isNillable()
                    && !elemTypeInfo.isMixed()
                    && (element.getDefaultValue() == null)

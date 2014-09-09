@@ -128,7 +128,7 @@ final class XmlSchemaElementValidator {
       case OPTIONAL:
         break;
       case PROHIBITED:
-        if ((value != null) && !value.isEmpty()) {
+        if ((value != null) && (value.length() > 0)) {
           throw new ValidationException(
               "Attribute "
               + attrQName
@@ -138,7 +138,7 @@ final class XmlSchemaElementValidator {
         }
         break;
       case REQUIRED:
-        if ((value == null) || value.isEmpty()) {
+        if ((value == null) || (value.length() == 0)) {
           throw new ValidationException(
               "Attribute "
               + attrQName
@@ -165,7 +165,7 @@ final class XmlSchemaElementValidator {
       /* If the value is null or empty there is no
        * further validation we can perform here.
        */
-      if ((value == null) || value.isEmpty()) {
+      if ((value == null) || (value.length() == 0)) {
         continue;
       }
 
@@ -238,7 +238,7 @@ final class XmlSchemaElementValidator {
       {
         if (!elemType.isMixed()
           && (elementContent != null)
-          && !elementContent.isEmpty()) {
+          && (elementContent.length() > 0)) {
           
           /* If a type is COMPLEX, then it either is a mixed type or it only
            * has elements as children.  Likewise, if the text is not null or
@@ -258,7 +258,7 @@ final class XmlSchemaElementValidator {
     case LIST:
     case UNION:
       {
-        if ((elementContent == null) || elementContent.isEmpty()) {
+        if ((elementContent == null) || (elementContent.length() == 0)) {
           if ( state.getElement().isNillable() ) {
             // Null is a perfectly valid state.
             return;
@@ -300,7 +300,7 @@ final class XmlSchemaElementValidator {
       XmlSchemaTypeInfo typeInfo,
       NamespaceContext nsContext) throws ValidationException {
 
-    if ((value == null) || value.isEmpty()) {
+    if ((value == null) || (value.length() == 0)) {
       throw new ValidationException(
           name + " cannot have a null or empty value!");
     }
@@ -404,7 +404,7 @@ final class XmlSchemaElementValidator {
           + " must have a type of ATOMIC, not "
           + typeInfo.getType());
 
-    } else if ((value == null) || value.isEmpty()) {
+    } else if ((value == null) || (value.length() == 0)) {
       throw new ValidationException(
           name
           + " cannot have a null or empty value when validating.");

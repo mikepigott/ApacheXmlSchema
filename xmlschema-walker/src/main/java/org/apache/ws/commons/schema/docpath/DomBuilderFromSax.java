@@ -141,7 +141,7 @@ public final class DomBuilderFromSax extends DefaultHandler {
     addContentToCurrentElement(false);
 
     final Element element =
-        document.createElementNS(uri.isEmpty() ? null : uri, qName);
+        document.createElementNS((uri.length() == 0) ? null : uri, qName);
 
     // Define New Prefixes
     for (String newPrefix : newPrefixes) {
@@ -150,7 +150,7 @@ public final class DomBuilderFromSax extends DefaultHandler {
         throw new SAXException("Prefix " + newPrefix + " is not recognized.");
       }
       String qualifiedName = null;
-      if ( !newPrefix.isEmpty() ) {
+      if (newPrefix.length() > 0) {
         qualifiedName = Constants.XMLNS_ATTRIBUTE + ':' + newPrefix;
       } else {
         qualifiedName = Constants.XMLNS_ATTRIBUTE;
@@ -186,7 +186,7 @@ public final class DomBuilderFromSax extends DefaultHandler {
 
     for (int attrIndex = 0; attrIndex < atts.getLength(); ++attrIndex) {
       String attrUri = atts.getURI(attrIndex);
-      if ( attrUri.isEmpty() ) {
+      if (attrUri.length() == 0) {
         attrUri = null;
       }
 
@@ -269,7 +269,7 @@ public final class DomBuilderFromSax extends DefaultHandler {
 
     final Element element = elementStack.remove(elementStack.size() - 1);
 
-    final String ns = ( uri.isEmpty() ) ? null : uri;
+    final String ns = (uri.length() == 0) ? null : uri;
 
     final boolean namespacesMatch =
         (((ns == null) && (element.getNamespaceURI() == null))

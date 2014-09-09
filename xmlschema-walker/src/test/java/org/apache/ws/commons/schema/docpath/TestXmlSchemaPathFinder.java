@@ -34,7 +34,6 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.apache.ws.commons.schema.XmlSchemaCollection;
 import org.apache.ws.commons.schema.XmlSchemaElement;
-import org.apache.ws.commons.schema.resolver.XmlSchemaMultiBaseUriResolver;
 import org.apache.ws.commons.schema.testutils.UtilsForTests;
 import org.apache.ws.commons.schema.walker.XmlSchemaWalker;
 import org.apache.ws.commons.schema.walker.XmlSchemaTypeInfo;
@@ -177,7 +176,6 @@ public class TestXmlSchemaPathFinder {
             "complex_test1.xml");
 
     XmlSchemaCollection xmlSchemaCollection = new XmlSchemaCollection();
-    xmlSchemaCollection.setSchemaResolver(new XmlSchemaMultiBaseUriResolver());
 
     FileReader schemaFileReader = null;
     try {
@@ -283,7 +281,6 @@ public class TestXmlSchemaPathFinder {
       throws Exception{
 
     XmlSchemaCollection xmlSchemaCollection = new XmlSchemaCollection();
-    xmlSchemaCollection.setSchemaResolver(new XmlSchemaMultiBaseUriResolver());
 
     FileReader schemaFileReader = null;
     try {

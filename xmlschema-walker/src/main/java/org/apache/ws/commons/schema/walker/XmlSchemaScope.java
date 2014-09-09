@@ -408,12 +408,12 @@ final class XmlSchemaScope {
 
         HashSet<String> namespaces = new HashSet<String>();
         for (String baseNs : baseNamespaces) {
-          if (!baseNs.isEmpty()) {
+          if (baseNs.length() > 0) {
             namespaces.add(baseNs);
           }
         }
         for (String childNs : childNamespaces) {
-          if (!childNs.isEmpty()) {
+          if (childNs.length() > 0) {
             namespaces.add(childNs);
           }
         }

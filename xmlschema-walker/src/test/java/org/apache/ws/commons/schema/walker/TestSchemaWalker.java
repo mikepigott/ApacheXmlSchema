@@ -51,7 +51,6 @@ import org.apache.ws.commons.schema.XmlSchemaPatternFacet;
 import org.apache.ws.commons.schema.XmlSchemaSequence;
 import org.apache.ws.commons.schema.XmlSchemaUse;
 import org.apache.ws.commons.schema.XmlSchemaWhiteSpaceFacet;
-import org.apache.ws.commons.schema.resolver.XmlSchemaMultiBaseUriResolver;
 import org.apache.ws.commons.schema.testutils.UtilsForTests;
 import org.apache.ws.commons.schema.walker.XmlSchemaAttrInfo;
 import org.apache.ws.commons.schema.walker.XmlSchemaBaseSimpleType;
@@ -882,7 +881,6 @@ public class TestSchemaWalker {
       fileReader = new FileReader(file);
 
       collection = new XmlSchemaCollection();
-      collection.setSchemaResolver(new XmlSchemaMultiBaseUriResolver());
       collection.read(new StreamSource(fileReader, file.getAbsolutePath()));
 
     } finally {
