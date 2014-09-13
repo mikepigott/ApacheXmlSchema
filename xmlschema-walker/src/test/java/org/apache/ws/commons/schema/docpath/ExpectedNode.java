@@ -64,6 +64,7 @@ public class ExpectedNode {
     assertEquals(msg, exp.maxOccurs, docNode.getMaxOccurs());
     assertEquals(msg, exp.children.size(), docNode.getIteration());
 
+    /* TODO
     if (docNode
           .getStateMachineNode()
           .getNodeType()
@@ -74,6 +75,7 @@ public class ExpectedNode {
       assertNotNull(msg, expElem);
       expElem.validate(docNode);
     }
+    */
 
     for (int iteration = 1; iteration <= docNode.getIteration(); ++iteration) {
       SortedMap<Integer, ExpectedNode> expected =
@@ -85,20 +87,22 @@ public class ExpectedNode {
       assertEquals(
           msg + ", iteration=" + iteration,
           expected.size(),
-          actual.size());
+          (actual == null) ? 0 : actual.size());
 
-      for (Map.Entry<Integer, XmlSchemaDocumentNode> actEntry
-            : actual.entrySet()) {
-        ExpectedNode expNode = expected.get(actEntry.getKey());
-        assertNotNull(
-            msg + ", iteration=" + iteration + ", child = " + actEntry.getKey(),
-            expNode);
-
-        validate(
-            msg + "\titeration=" + iteration + "child=" + actEntry.getKey(),
-            expNode,
-            actEntry.getValue(),
-            expElements);
+      if (actual != null) {
+        for (Map.Entry<Integer, XmlSchemaDocumentNode> actEntry
+              : actual.entrySet()) {
+          ExpectedNode expNode = expected.get(actEntry.getKey());
+          assertNotNull(
+              msg + ", iteration=" + iteration + ", child = " + actEntry.getKey() + ": entry " + actEntry.getKey() + " is not expected.",
+              expNode);
+  
+          validate(
+              msg + "\titeration=" + iteration + "child=" + actEntry.getKey(),
+              expNode,
+              actEntry.getValue(),
+              expElements);
+        }
       }
     }
   }

@@ -23,9 +23,12 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedMap;
+import java.util.TreeMap;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
@@ -80,6 +83,16 @@ public class TestXmlSchemaPathFinder {
     expectedTypes.put(root, XmlSchemaTypeInfo.Type.COMPLEX);
 
     validate(traversal.getDocumentNode(), expectedTypes);
+
+    ExpectedNode node =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            1,
+            1,
+            Collections.<SortedMap<Integer, ExpectedNode>>singletonList(
+                new TreeMap<Integer, ExpectedNode>()));
+
+    node.validate(root.toString(), node, traversal.getDocumentNode(), null);
   }
 
   @Test
@@ -112,6 +125,67 @@ public class TestXmlSchemaPathFinder {
         XmlSchemaTypeInfo.Type.ATOMIC);
 
     validate(traversal.getDocumentNode(), expectedTypes);
+
+    ExpectedNode primitive =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            1,
+            1,
+            Collections.<SortedMap<Integer, ExpectedNode>>singletonList(
+                new TreeMap<Integer, ExpectedNode>()));
+
+    // avro:primitive is the first choice; its index is 0
+    TreeMap<Integer, ExpectedNode> choicePrimitiveChild =
+        new TreeMap<Integer, ExpectedNode>();
+    choicePrimitiveChild.put(0, primitive);
+
+    // avro:nonNullPrimitive is the second choice; its index is 1
+    TreeMap<Integer, ExpectedNode> choiceNonNullPrimitiveChild =
+        new TreeMap<Integer, ExpectedNode>();
+    choiceNonNullPrimitiveChild.put(1, primitive);
+
+    ArrayList<SortedMap<Integer, ExpectedNode>> choiceChildren =
+        new ArrayList<SortedMap<Integer, ExpectedNode>>();
+
+    for (int i = 0; i < 9; ++i) {
+      choiceChildren.add(choicePrimitiveChild);
+    }
+    for (int i = 0; i < 8; ++i) {
+      choiceChildren.add(choiceNonNullPrimitiveChild);
+    }
+
+    ExpectedNode choiceNode =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.CHOICE,
+            0L,
+            Long.MAX_VALUE,
+            choiceChildren);
+
+    TreeMap<Integer, ExpectedNode> sequenceChild =
+        new TreeMap<Integer, ExpectedNode>();
+    sequenceChild.put(0, choiceNode);
+
+    ExpectedNode sequenceNode =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.SEQUENCE,
+            1,
+            1,
+            Collections.<SortedMap<Integer, ExpectedNode>>singletonList(
+                sequenceChild));
+
+    TreeMap<Integer, ExpectedNode> rootChild =
+        new TreeMap<Integer, ExpectedNode>();
+    rootChild.put(0, sequenceNode);
+
+    ExpectedNode rootNode =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            1,
+            1,
+            Collections.<SortedMap<Integer, ExpectedNode>>singletonList(
+                rootChild));
+
+    rootNode.validate(root.toString(), rootNode, traversal.getDocumentNode(), null);
   }
 
   @Test

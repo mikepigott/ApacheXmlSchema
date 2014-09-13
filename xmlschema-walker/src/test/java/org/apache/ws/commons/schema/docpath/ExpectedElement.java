@@ -32,16 +32,13 @@ import static org.junit.Assert.*;
 class ExpectedElement {
 
   private XmlSchemaTypeInfo typeInfo;
-  private List<Integer> numChildrenByIteration;
   private List<ExpectedAttribute> attributes;
 
   ExpectedElement(
       XmlSchemaTypeInfo typeInfo,
-      List<Integer> numChildrenByIteration,
       List<ExpectedAttribute> attributes) {
 
     this.typeInfo = typeInfo;
-    this.numChildrenByIteration = numChildrenByIteration;
     this.attributes = attributes;
   }
 
