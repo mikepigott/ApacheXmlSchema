@@ -19,17 +19,46 @@
 
 package org.apache.ws.commons.schema.docpath;
 
+import java.util.List;
+
+import org.apache.ws.commons.schema.walker.XmlSchemaTypeInfo;
+
+import static org.junit.Assert.*;
+
 /**
  * This is a simpler representation of an XML
  * element to facilitate easier testing.
  */
-public class ExpectedElement {
+class ExpectedElement {
 
-  /**
-   * 
-   */
-  public ExpectedElement() {
-    // TODO Auto-generated constructor stub
+  private XmlSchemaTypeInfo typeInfo;
+  private List<Integer> numChildrenByIteration;
+  private List<ExpectedAttribute> attributes;
+
+  ExpectedElement(
+      XmlSchemaTypeInfo typeInfo,
+      List<Integer> numChildrenByIteration,
+      List<ExpectedAttribute> attributes) {
+
+    this.typeInfo = typeInfo;
+    this.numChildrenByIteration = numChildrenByIteration;
+    this.attributes = attributes;
   }
 
+  void validate(XmlSchemaDocumentNode docNode) {
+    String qName =
+        docNode.getStateMachineNode().getElement().getQName().toString();
+
+    XmlSchemaTypeInfo actType = docNode.getStateMachineNode().getElementType();
+
+    assertEquals(qName, typeInfo.getType(), actType.getType());
+    assertEquals(qName, typeInfo.getBaseType(), actType.getBaseType());
+
+    assertEquals(
+        qName,
+        typeInfo.getUserRecognizedType(),
+        actType.getUserRecognizedType());
+
+    // TODO: facets, list / union child types, children by iteration, attributes
+  }
 }
