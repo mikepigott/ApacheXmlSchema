@@ -58,7 +58,7 @@
 		<complexType>
 			<sequence>
 				<choice minOccurs="0" maxOccurs="2">
-					<choice minOccurs="1" maxOccurs="3">
+					<choice minOccurs="1" maxOccurs="4">
 						<element ref="avro:qName"    />
 						<element ref="avro:avroEnum" />
 						<element ref="avro:xmlEnum"  />
