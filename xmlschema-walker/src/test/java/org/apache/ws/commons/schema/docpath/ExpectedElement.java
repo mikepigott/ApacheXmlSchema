@@ -32,7 +32,6 @@ class ExpectedElement {
   private XmlSchemaTypeInfo typeInfo;
 
   ExpectedElement(XmlSchemaTypeInfo typeInfo) {
-
     this.typeInfo = typeInfo;
   }
 
@@ -49,7 +48,5 @@ class ExpectedElement {
         qName,
         typeInfo.getUserRecognizedType(),
         actType.getUserRecognizedType());
-
-    // TODO: facets, list / union child types, children by iteration, attributes
   }
 }
