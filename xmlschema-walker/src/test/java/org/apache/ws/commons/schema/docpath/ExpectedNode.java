@@ -32,11 +32,11 @@ import javax.xml.namespace.QName;
  */
 public class ExpectedNode {
 
-  private XmlSchemaStateMachineNode.Type nodeType;
-  private long minOccurs;
-  private long maxOccurs;
-  private List<SortedMap<Integer, ExpectedNode>> children;
-  private QName elemQName;
+  XmlSchemaStateMachineNode.Type nodeType;
+  long minOccurs;
+  long maxOccurs;
+  List<SortedMap<Integer, ExpectedNode>> children;
+  QName elemQName;
 
   ExpectedNode(
       XmlSchemaStateMachineNode.Type nodeType,

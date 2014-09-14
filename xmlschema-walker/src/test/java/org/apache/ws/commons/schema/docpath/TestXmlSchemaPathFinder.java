@@ -19,6 +19,8 @@
 
 package org.apache.ws.commons.schema.docpath;
 
+import static org.junit.Assert.*;
+
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -99,6 +101,15 @@ public class TestXmlSchemaPathFinder {
         node,
         traversal.getDocumentNode(),
         expectedElements);
+
+    ArrayList<ExpectedPathNode> expPath = new ArrayList<ExpectedPathNode>();
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            node,
+            1));
+
+    validate(expPath, traversal);
   }
 
   @Test
@@ -1172,6 +1183,633 @@ public class TestXmlSchemaPathFinder {
         rootSubstGrp,
         traversal.getDocumentNode(),
         expectedElements);
+
+    ArrayList<ExpectedPathNode> expPath =
+        new ArrayList<ExpectedPathNode>();
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            rootSubstGrp,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            realRoot,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            realRootSequence,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            backtrack,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            backtrackSequence,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            backtrackSubSequence,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            qName,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CONTENT,
+            qName,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            backtrackSubSequence,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            avroEnum,
+            1));
+
+    // Path Index 10
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CONTENT,
+            avroEnum,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            backtrackSubSequence,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            xmlEnumMaxOccurs2,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CONTENT,
+            xmlEnumMaxOccurs2,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.SIBLING,
+            xmlEnumMaxOccurs2,
+            2));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CONTENT,
+            xmlEnumMaxOccurs2,
+            2));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            backtrackSubSequence,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            unsignedLongList,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CONTENT,
+            unsignedLongList,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            backtrackSubSequence,
+            1));
+
+    // Path Index 20
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            listOfUnion,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CONTENT,
+            listOfUnion,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            backtrackSubSequence,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            backtrackSequence,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            backtrack,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            realRootSequence,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            allTheThings,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            allGroup,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            secondMap,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            allGroup,
+            1));
+
+    // Path Index 30
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            firstMap,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            firstMapSequence,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            value,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.SIBLING,
+            value,
+            2));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            firstMapSequence,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            firstMap,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            allGroup,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            allTheThings,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            realRootSequence,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            prohibit,
+            1));
+
+    // Path Index 40
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            prohibitSequence,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            fixed,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            prohibitSequence,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            prohibit,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            realRootSequence,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            anyAndFriends,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CONTENT,
+            anyAndFriends,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            anyAndFriendsSeq,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            any,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            anyAndFriendsSeq,
+            1));
+
+    // Path Index 50
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CONTENT,
+            anyAndFriendsSeq,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            any,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            anyAndFriendsSeq,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CONTENT,
+            anyAndFriendsSeq,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            any,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            anyAndFriendsSeq,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CONTENT,
+            anyAndFriendsSeq,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            any,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            anyAndFriendsSeq,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CONTENT,
+            anyAndFriendsSeq,
+            1));
+
+    // Path Index 60
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            any,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            anyAndFriendsSeq,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CONTENT,
+            anyAndFriendsSeq,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            any,
+            1));
+ 
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            anyAndFriendsSeq,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            anyAndFriends,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CONTENT,
+            anyAndFriends,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            realRootSequence,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            simpleExtension,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CONTENT,
+            simpleExtension,
+            1));
+
+    // Path Index 70
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            realRootSequence,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            simpleRestriction,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CONTENT,
+            simpleRestriction,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            realRootSequence,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            complexExtension,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            complexExtensionSequence,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            complexExtensionSubSequence,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            fixed,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            complexExtensionSubSequence,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            complexExtensionSequence,
+            1));
+
+    // Path Index 80
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            complexExtensionSubChoice,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            unsignedLongList,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CONTENT,
+            unsignedLongList,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            complexExtensionSubChoice,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            complexExtensionSequence,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            complexExtension,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            realRootSequence,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            mixedType,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CONTENT,
+            mixedType,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            mixedTypeSeq,
+            1));
+
+    // Path Index 90
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            listOfUnion,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CONTENT,
+            listOfUnion,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            mixedTypeSeq,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CONTENT,
+            mixedTypeSeq,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CHILD,
+            unsignedLongList,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CONTENT,
+            unsignedLongList,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            mixedTypeSeq,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            mixedType,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.CONTENT,
+            mixedType,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            realRootSequence,
+            1));
+
+    // Path Index 100
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            realRoot,
+            1));
+
+    expPath.add(
+        new ExpectedPathNode(
+            XmlSchemaPathNode.Direction.PARENT,
+            rootSubstGrp,
+            1));
+
+    validate(expPath, traversal);
   }
 
   private XmlSchemaPathNode runTest(File schemaFile, File xmlFile, QName root)
@@ -1221,4 +1859,46 @@ public class TestXmlSchemaPathFinder {
     return pathFinder.getXmlSchemaTraversal();
   }
 
+  void validate(ArrayList<ExpectedPathNode> expPath, XmlSchemaPathNode start) {
+    XmlSchemaPathNode prev = null;
+    XmlSchemaPathNode curr = start;
+    int position = 0;
+
+    do {
+      assertTrue(
+          "Expected Path Too Short (position "
+            + position
+            + " >= expected "
+            + expPath.size()
+            + ")",
+          expPath.size() > position);
+
+      assertEquals(
+          "Path Index " + position + "; prev != curr.getPrevious()",
+          prev,
+          curr.getPrevious());
+
+      StringBuilder state = new StringBuilder("Path Index: ");
+      state.append(position).append(": Expected=");
+      state.append(expPath.get(position).expDocNode.nodeType);
+
+      if (expPath.get(position).expDocNode.nodeType.equals(XmlSchemaStateMachineNode.Type.ELEMENT)) {
+        state.append(",").append(expPath.get(position).expDocNode.elemQName);
+      }
+
+      state.append("; Actual=").append(curr.getStateMachineNode().getNodeType());
+      if (curr.getStateMachineNode().getNodeType().equals(XmlSchemaStateMachineNode.Type.ELEMENT)) {
+        state.append(',').append(curr.getStateMachineNode().getElement().getQName());
+      }
+      System.err.println(state.toString());
+
+      expPath.get(position).validate(position, curr);
+
+      prev = curr;
+      curr = curr.getNext();
+      ++position;
+    } while (curr != null);
+
+    assertEquals(expPath.size(), position);
+  }
 }
