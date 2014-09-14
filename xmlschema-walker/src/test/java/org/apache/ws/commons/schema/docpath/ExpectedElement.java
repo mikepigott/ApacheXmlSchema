@@ -19,8 +19,6 @@
 
 package org.apache.ws.commons.schema.docpath;
 
-import java.util.List;
-
 import org.apache.ws.commons.schema.walker.XmlSchemaTypeInfo;
 
 import static org.junit.Assert.*;
@@ -32,14 +30,10 @@ import static org.junit.Assert.*;
 class ExpectedElement {
 
   private XmlSchemaTypeInfo typeInfo;
-  private List<ExpectedAttribute> attributes;
 
-  ExpectedElement(
-      XmlSchemaTypeInfo typeInfo,
-      List<ExpectedAttribute> attributes) {
+  ExpectedElement(XmlSchemaTypeInfo typeInfo) {
 
     this.typeInfo = typeInfo;
-    this.attributes = attributes;
   }
 
   void validate(XmlSchemaDocumentNode docNode) {

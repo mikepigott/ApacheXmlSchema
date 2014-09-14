@@ -77,11 +77,11 @@ public class ExpectedNode {
       QName actQName = docNode.getStateMachineNode().getElement().getQName();
       assertEquals(msg, exp.elemQName, actQName);
 
-      /*
-      ExpectedElement expElem = expElements.get(actQName);
-      assertNotNull(msg, expElem);
-      expElem.validate(docNode);
-      */
+      if (expElements != null) {
+        ExpectedElement expElem = expElements.get(actQName);
+        assertNotNull(msg, expElem);
+        expElem.validate(docNode);
+      }
     }
 
     for (int iteration = 1; iteration <= docNode.getIteration(); ++iteration) {
