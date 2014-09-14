@@ -769,7 +769,7 @@ public class TestXmlSchemaPathFinder {
     SortedMap<Integer, ExpectedNode> noChildren =
         new TreeMap<Integer, ExpectedNode>();
 
-    // avro:qName
+    // Leaf Nodes
     ExpectedNode qName =
         new ExpectedNode(
             XmlSchemaStateMachineNode.Type.ELEMENT,
@@ -778,14 +778,13 @@ public class TestXmlSchemaPathFinder {
             Collections.singletonList(noChildren));
     qName.setElemQName(new QName(COMPLEX_SCHEMA_NS, "qName"));
 
-    // avro:avroEnum
     ExpectedNode avroEnum =
         new ExpectedNode(
             XmlSchemaStateMachineNode.Type.ELEMENT,
             1,
             1,
             Collections.singletonList(noChildren));
-    qName.setElemQName(new QName(COMPLEX_SCHEMA_NS, "avroEnum"));
+    avroEnum.setElemQName(new QName(COMPLEX_SCHEMA_NS, "avroEnum"));
 
     ExpectedNode xmlEnum =
         new ExpectedNode(
@@ -795,12 +794,17 @@ public class TestXmlSchemaPathFinder {
             Collections.singletonList(noChildren));
     xmlEnum.setElemQName(new QName(COMPLEX_SCHEMA_NS, "xmlEnum"));
 
+    ArrayList<SortedMap<Integer, ExpectedNode>> xmlEnumMaxOccurs2Children =
+        new ArrayList<SortedMap<Integer, ExpectedNode>>();
+    xmlEnumMaxOccurs2Children.add(noChildren);
+    xmlEnumMaxOccurs2Children.add(noChildren);
+
     ExpectedNode xmlEnumMaxOccurs2 =
         new ExpectedNode(
             XmlSchemaStateMachineNode.Type.ELEMENT,
             1,
             2,
-            Collections.singletonList(noChildren));
+            xmlEnumMaxOccurs2Children);
     xmlEnumMaxOccurs2.setElemQName(new QName(COMPLEX_SCHEMA_NS, "xmlEnum"));
 
     ExpectedNode unsignedLongList =
@@ -820,12 +824,17 @@ public class TestXmlSchemaPathFinder {
             Collections.singletonList(noChildren));
     listOfUnion.setElemQName(new QName(COMPLEX_SCHEMA_NS, "listOfUnion"));
 
+    ArrayList<SortedMap<Integer, ExpectedNode>> valueChildren =
+        new ArrayList<SortedMap<Integer, ExpectedNode>>();
+    valueChildren.add(noChildren);
+    valueChildren.add(noChildren);
+
     ExpectedNode value =
         new ExpectedNode(
             XmlSchemaStateMachineNode.Type.ELEMENT,
             1,
-            1,
-            Collections.singletonList(noChildren));
+            2,
+            valueChildren);
     value.setElemQName(new QName(COMPLEX_SCHEMA_NS, "value"));
 
     ExpectedNode fixed =
@@ -846,11 +855,11 @@ public class TestXmlSchemaPathFinder {
     // backtrack
     SortedMap<Integer, ExpectedNode> backtrackSubSequenceChildren =
         new TreeMap<Integer, ExpectedNode>();
-    backtrackSubSequenceChildren.put(1, qName);
-    backtrackSubSequenceChildren.put(2, avroEnum);
-    backtrackSubSequenceChildren.put(3, xmlEnumMaxOccurs2);
-    backtrackSubSequenceChildren.put(4, unsignedLongList);
-    backtrackSubSequenceChildren.put(5, listOfUnion);
+    backtrackSubSequenceChildren.put(0, qName);
+    backtrackSubSequenceChildren.put(1, avroEnum);
+    backtrackSubSequenceChildren.put(2, xmlEnumMaxOccurs2);
+    backtrackSubSequenceChildren.put(3, unsignedLongList);
+    backtrackSubSequenceChildren.put(4, listOfUnion);
 
     ExpectedNode backtrackSubSequence =
         new ExpectedNode(
@@ -882,16 +891,221 @@ public class TestXmlSchemaPathFinder {
             Collections.singletonList(backtrackChildren));
     backtrack.setElemQName(new QName(COMPLEX_SCHEMA_NS, "backtrack"));
 
+    // allTheThings
+    SortedMap<Integer, ExpectedNode> firstMapSeqChildren =
+        new TreeMap<Integer, ExpectedNode>();
+    firstMapSeqChildren.put(0, value);
+
+    ExpectedNode firstMapSequence =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.SEQUENCE,
+            1,
+            1,
+            Collections.singletonList(firstMapSeqChildren));
+
+    SortedMap<Integer, ExpectedNode> firstMapChildren =
+        new TreeMap<Integer, ExpectedNode>();
+    firstMapChildren.put(0, firstMapSequence);
+
+    ExpectedNode firstMap =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            1,
+            1,
+            Collections.singletonList(firstMapChildren));
+    firstMap.setElemQName(new QName(COMPLEX_SCHEMA_NS, "firstMap"));
+
+    ExpectedNode secondMap =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            1,
+            1,
+            Collections.singletonList(noChildren));
+    secondMap.setElemQName(new QName(COMPLEX_SCHEMA_NS, "secondMap"));
+
+    SortedMap<Integer, ExpectedNode> allGroupChildren =
+        new TreeMap<Integer, ExpectedNode>();
+
+    allGroupChildren.put(0, firstMap);
+    allGroupChildren.put(1, secondMap);
+
+    ExpectedNode allGroup =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.ALL,
+            1,
+            1,
+            Collections.singletonList(allGroupChildren));
+
+    SortedMap<Integer, ExpectedNode> allTheThingsChildren =
+        new TreeMap<Integer, ExpectedNode>();
+    allTheThingsChildren.put(0, allGroup);
+
+    ExpectedNode allTheThings =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            1,
+            1,
+            Collections.singletonList(allTheThingsChildren));
+    allTheThings.setElemQName(new QName(COMPLEX_SCHEMA_NS, "allTheThings"));
+
+    // prohibit
+    SortedMap<Integer, ExpectedNode> prohibitSeqChildren =
+        new TreeMap<Integer, ExpectedNode>();
+    prohibitSeqChildren.put(0, fixed);
+
+    ExpectedNode prohibitSequence =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.SEQUENCE,
+            1,
+            1,
+            Collections.singletonList(prohibitSeqChildren));
+
+    SortedMap<Integer, ExpectedNode> prohibitChildren =
+        new TreeMap<Integer, ExpectedNode>();
+    prohibitChildren.put(0, prohibitSequence);
+
+    ExpectedNode prohibit =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            1,
+            1,
+            Collections.singletonList(prohibitChildren));
+    prohibit.setElemQName(new QName(COMPLEX_SCHEMA_NS, "prohibit"));
+
+    // anyAndFriends
+    SortedMap<Integer, ExpectedNode> anyAndFriendsSeqChildren =
+        new TreeMap<Integer, ExpectedNode>();
+    anyAndFriendsSeqChildren.put(0, any);
+    anyAndFriendsSeqChildren.put(1, any);
+    anyAndFriendsSeqChildren.put(2, any);
+    anyAndFriendsSeqChildren.put(3, any);
+    anyAndFriendsSeqChildren.put(4, any);
+    anyAndFriendsSeqChildren.put(5, any);
+
+    ExpectedNode anyAndFriendsSeq =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.SEQUENCE,
+            1,
+            1,
+            Collections.singletonList(anyAndFriendsSeqChildren));
+
+    SortedMap<Integer, ExpectedNode> anyAndFriendsChildren =
+        new TreeMap<Integer, ExpectedNode>();
+    anyAndFriendsChildren.put(0, anyAndFriendsSeq);
+
+    ExpectedNode anyAndFriends = 
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            1,
+            1,
+            Collections.singletonList(anyAndFriendsChildren));
+    anyAndFriends.setElemQName( new QName(COMPLEX_SCHEMA_NS, "anyAndFriends") );
+
+    // simpleExtension
+    ExpectedNode simpleExtension =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            0,
+            1,
+            Collections.singletonList(noChildren));
+    simpleExtension.setElemQName(
+        new QName(COMPLEX_SCHEMA_NS, "simpleExtension"));
+
+    // simpleRestriction
+    ExpectedNode simpleRestriction =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            0,
+            1,
+            Collections.singletonList(noChildren));
+    simpleRestriction.setElemQName(
+        new QName(COMPLEX_SCHEMA_NS, "simpleRestriction"));
+
+    // complexExtension
+    SortedMap<Integer, ExpectedNode> complexExtensionSubSequenceChildren =
+        new TreeMap<Integer, ExpectedNode>();
+    complexExtensionSubSequenceChildren.put(0, fixed);
+
+    ExpectedNode complexExtensionSubSequence =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.SEQUENCE,
+            1,
+            1,
+            Collections.singletonList(complexExtensionSubSequenceChildren));
+
+    SortedMap<Integer, ExpectedNode> complexExtensionSubChoiceChildren =
+        new TreeMap<Integer, ExpectedNode>();
+    complexExtensionSubChoiceChildren.put(1, unsignedLongList);
+
+    ExpectedNode complexExtensionSubChoice =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.CHOICE,
+            1,
+            1,
+            Collections.singletonList(complexExtensionSubChoiceChildren));
+
+    SortedMap<Integer, ExpectedNode> complexExtensionSequenceChildren =
+        new TreeMap<Integer, ExpectedNode>();
+    complexExtensionSequenceChildren.put(0, complexExtensionSubSequence);
+    complexExtensionSequenceChildren.put(1, complexExtensionSubChoice);
+
+    ExpectedNode complexExtensionSequence =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.SEQUENCE,
+            1,
+            1,
+            Collections.singletonList(complexExtensionSequenceChildren));
+
+    SortedMap<Integer, ExpectedNode> complexExtensionChildren =
+        new TreeMap<Integer, ExpectedNode>();
+    complexExtensionChildren.put(0, complexExtensionSequence);
+
+    ExpectedNode complexExtension =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            0,
+            1,
+            Collections.singletonList(complexExtensionChildren));
+    complexExtension.setElemQName(
+        new QName(COMPLEX_SCHEMA_NS, "complexExtension"));
+
+    // mixedType
+    SortedMap<Integer, ExpectedNode> mixedTypeSeqChildren =
+        new TreeMap<Integer, ExpectedNode>();
+    mixedTypeSeqChildren.put(0, listOfUnion);
+    mixedTypeSeqChildren.put(1, unsignedLongList);
+
+    ExpectedNode mixedTypeSeq =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.SEQUENCE,
+            1,
+            1,
+            Collections.singletonList(mixedTypeSeqChildren));
+
+    SortedMap<Integer, ExpectedNode> mixedTypeChildren =
+        new TreeMap<Integer, ExpectedNode>();
+    mixedTypeChildren.put(0, mixedTypeSeq);
+
+    ExpectedNode mixedType =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            0,
+            1,
+            Collections.singletonList(mixedTypeChildren));
+    mixedType.setElemQName(new QName(COMPLEX_SCHEMA_NS, "mixedType"));
+
     // realRoot
     SortedMap<Integer, ExpectedNode> realRootSequenceChildren =
         new TreeMap<Integer, ExpectedNode>();
 
     realRootSequenceChildren.put(0, backtrack);
-
-    // TODO: Replace as necessary
-    for (int i = 1; i < 8; ++i) {
-      realRootSequenceChildren.put(i, backtrack);
-    }
+    realRootSequenceChildren.put(1, allTheThings);
+    realRootSequenceChildren.put(2, prohibit);
+    realRootSequenceChildren.put(3, anyAndFriends);
+    realRootSequenceChildren.put(4, simpleExtension);
+    realRootSequenceChildren.put(5, simpleRestriction);
+    realRootSequenceChildren.put(6, complexExtension);
+    realRootSequenceChildren.put(7, mixedType);
 
     ExpectedNode realRootSequence =
         new ExpectedNode(
