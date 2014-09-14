@@ -92,7 +92,7 @@ public class ExpectedNode {
           docNode.getChildren(iteration);
 
       assertEquals(
-          msg + ", iteration=" + iteration,
+          msg + ", iteration=" + iteration + "; " + exp.nodeType,
           expected.size(),
           (actual == null) ? 0 : actual.size());
 
@@ -105,7 +105,12 @@ public class ExpectedNode {
               expNode);
   
           validate(
-              msg + "\titeration=" + iteration + "child=" + actEntry.getKey(),
+              msg
+                + "\titeration="
+                + iteration
+                + "child="
+                + actEntry.getKey()
+                + " (" + exp.nodeType + ")",
               expNode,
               actEntry.getValue(),
               expElements);
