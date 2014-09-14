@@ -92,7 +92,14 @@ public class TestXmlSchemaPathFinder {
             Collections.<SortedMap<Integer, ExpectedNode>>singletonList(
                 new TreeMap<Integer, ExpectedNode>()));
 
-    node.validate(root.toString(), node, traversal.getDocumentNode(), null);
+    node.setElemQName(
+        new QName(TESTSCHEMA_NS, "root"));
+
+    ExpectedNode.validate(
+        root.toString(),
+        node,
+        traversal.getDocumentNode(),
+        null);
   }
 
   @Test
@@ -133,6 +140,17 @@ public class TestXmlSchemaPathFinder {
             1,
             Collections.<SortedMap<Integer, ExpectedNode>>singletonList(
                 new TreeMap<Integer, ExpectedNode>()));
+    primitive.setElemQName( new QName(TESTSCHEMA_NS, "primitive") );
+
+    ExpectedNode nonNullPrimitive =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            1,
+            1,
+            Collections.<SortedMap<Integer, ExpectedNode>>singletonList(
+                new TreeMap<Integer, ExpectedNode>()));
+    nonNullPrimitive.setElemQName(
+        new QName(TESTSCHEMA_NS, "nonNullPrimitive"));
 
     // avro:primitive is the first choice; its index is 0
     TreeMap<Integer, ExpectedNode> choicePrimitiveChild =
@@ -142,7 +160,7 @@ public class TestXmlSchemaPathFinder {
     // avro:nonNullPrimitive is the second choice; its index is 1
     TreeMap<Integer, ExpectedNode> choiceNonNullPrimitiveChild =
         new TreeMap<Integer, ExpectedNode>();
-    choiceNonNullPrimitiveChild.put(1, primitive);
+    choiceNonNullPrimitiveChild.put(1, nonNullPrimitive);
 
     ArrayList<SortedMap<Integer, ExpectedNode>> choiceChildren =
         new ArrayList<SortedMap<Integer, ExpectedNode>>();
@@ -184,8 +202,14 @@ public class TestXmlSchemaPathFinder {
             1,
             Collections.<SortedMap<Integer, ExpectedNode>>singletonList(
                 rootChild));
+    rootNode.setElemQName(
+        new QName(TESTSCHEMA_NS, "root"));
 
-    rootNode.validate(root.toString(), rootNode, traversal.getDocumentNode(), null);
+    ExpectedNode.validate(
+        root.toString(),
+        rootNode,
+        traversal.getDocumentNode(),
+        null);
   }
 
   @Test
@@ -226,6 +250,397 @@ public class TestXmlSchemaPathFinder {
         XmlSchemaTypeInfo.Type.COMPLEX);
 
     validate(traversal.getDocumentNode(), expectedTypes);
+
+    ExpectedNode primitive =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            1,
+            1,
+            Collections.<SortedMap<Integer, ExpectedNode>>singletonList(
+                new TreeMap<Integer, ExpectedNode>()));
+    primitive.setElemQName( new QName(TESTSCHEMA_NS, "primitive") );
+
+    ExpectedNode nonNullPrimitive =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            1,
+            1,
+            Collections.<SortedMap<Integer, ExpectedNode>>singletonList(
+                new TreeMap<Integer, ExpectedNode>()));
+    nonNullPrimitive.setElemQName(
+        new QName(TESTSCHEMA_NS, "nonNullPrimitive"));
+
+    // avro:primitive is the first choice; its index is 0
+    TreeMap<Integer, ExpectedNode> choicePrimitiveChild =
+        new TreeMap<Integer, ExpectedNode>();
+    choicePrimitiveChild.put(0, primitive);
+
+    // avro:nonNullPrimitive is the second choice; its index is 1
+    TreeMap<Integer, ExpectedNode> choiceNonNullPrimitiveChild =
+        new TreeMap<Integer, ExpectedNode>();
+    choiceNonNullPrimitiveChild.put(1, nonNullPrimitive);
+
+    // map 1
+    ArrayList<SortedMap<Integer, ExpectedNode>> map1ChoiceChildren =
+        new ArrayList<SortedMap<Integer, ExpectedNode>>();
+    map1ChoiceChildren.add(choicePrimitiveChild);
+    map1ChoiceChildren.add(choiceNonNullPrimitiveChild);
+
+    ExpectedNode map1Choice =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.CHOICE,
+            0,
+            Long.MAX_VALUE,
+            map1ChoiceChildren);
+
+    SortedMap<Integer, ExpectedNode> map1SeqChildren =
+        new TreeMap<Integer, ExpectedNode>();
+    map1SeqChildren.put(0, map1Choice);
+
+    ExpectedNode map1Seq =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.SEQUENCE,
+            1,
+            1,
+            Collections.singletonList(map1SeqChildren));
+
+    SortedMap<Integer, ExpectedNode> map1Children =
+        new TreeMap<Integer, ExpectedNode>();
+    map1Children.put(0, map1Seq);
+
+    ExpectedNode map1 =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            1,
+            1,
+            Collections.singletonList(map1Children));
+    map1.setElemQName(new QName(TESTSCHEMA_NS, "map"));
+
+    // avro:map is a substitution of avro:record, its index is 2
+    SortedMap<Integer, ExpectedNode> map1SubsGrpChild =
+        new TreeMap<Integer, ExpectedNode>();
+    map1SubsGrpChild.put(1, map1);
+
+    ExpectedNode map1SubstGroup =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.SUBSTITUTION_GROUP,
+            1,
+            1,
+            Collections.singletonList(map1SubsGrpChild));
+
+    SortedMap<Integer, ExpectedNode> choiceMap1Child =
+        new TreeMap<Integer, ExpectedNode>();
+    choiceMap1Child.put(2, map1SubstGroup);
+
+    // map 2
+    SortedMap<Integer, ExpectedNode> map2ChoiceChildren =
+        new TreeMap<Integer, ExpectedNode>();
+    map2ChoiceChildren.put(0, primitive);
+
+    ExpectedNode map2Choice =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.CHOICE,
+            0,
+            Long.MAX_VALUE,
+            Collections.singletonList(map2ChoiceChildren));
+
+    SortedMap<Integer, ExpectedNode> map2SequenceChildren =
+        new TreeMap<Integer, ExpectedNode>();
+    map2SequenceChildren.put(0, map2Choice);
+
+    ExpectedNode map2Seq =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.SEQUENCE,
+            1,
+            1,
+            Collections.singletonList(map2SequenceChildren));
+
+    SortedMap<Integer, ExpectedNode> map2Children =
+        new TreeMap<Integer, ExpectedNode>();
+    map2Children.put(0, map2Seq);
+
+    ExpectedNode map2 =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            1,
+            1,
+            Collections.singletonList(map2Children));
+    map2.setElemQName(new QName(TESTSCHEMA_NS, "map"));
+
+    SortedMap<Integer, ExpectedNode> map2SubstGrpChild =
+        new TreeMap<Integer, ExpectedNode>();
+    map2SubstGrpChild.put(1, map2);
+
+    ExpectedNode map2SubstGrp =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.SUBSTITUTION_GROUP,
+            1,
+            1,
+            Collections.singletonList(map2SubstGrpChild));
+
+    SortedMap<Integer, ExpectedNode> choiceMap2Child =
+        new TreeMap<Integer, ExpectedNode>();
+    choiceMap2Child.put(2, map2SubstGrp);
+
+    // map 4, which is owned by map 3
+    SortedMap<Integer, ExpectedNode> map4ChoiceChildren =
+        new TreeMap<Integer, ExpectedNode>();
+    map4ChoiceChildren.put(1, nonNullPrimitive);
+
+    ExpectedNode map4Choice =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.CHOICE,
+            0,
+            Long.MAX_VALUE,
+            Collections.singletonList(map4ChoiceChildren));
+
+    SortedMap<Integer, ExpectedNode> map4SeqChildren =
+        new TreeMap<Integer, ExpectedNode>();
+    map4SeqChildren.put(0, map4Choice);
+
+    ExpectedNode map4Seq =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.SEQUENCE,
+            1,
+            1,
+            Collections.singletonList(map4SeqChildren));
+
+    SortedMap<Integer, ExpectedNode> map4Children =
+        new TreeMap<Integer, ExpectedNode>();
+    map4Children.put(0, map4Seq);
+
+    ExpectedNode map4 =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            1,
+            1,
+            Collections.singletonList(map4Children));
+    map4.setElemQName(new QName(TESTSCHEMA_NS, "map"));
+
+    SortedMap<Integer, ExpectedNode> map4SubstGrpChildren =
+        new TreeMap<Integer, ExpectedNode>();
+    map4SubstGrpChildren.put(1, map4);
+
+    ExpectedNode map4SubstGrp =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.SUBSTITUTION_GROUP,
+            1,
+            1,
+            Collections.singletonList(map4SubstGrpChildren));
+
+    // map 5, which is owned by map 3
+    SortedMap<Integer, ExpectedNode> map5ChoiceChildren =
+        new TreeMap<Integer, ExpectedNode>();
+    map5ChoiceChildren.put(0, primitive);
+
+    ExpectedNode map5Choice =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.CHOICE,
+            0, 
+            Long.MAX_VALUE,
+            Collections.singletonList(map5ChoiceChildren));
+
+    SortedMap<Integer, ExpectedNode> map5SeqChildren =
+        new TreeMap<Integer, ExpectedNode>();
+    map5SeqChildren.put(0, map5Choice);
+
+    ExpectedNode map5Seq =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.SEQUENCE,
+            1,
+            1,
+            Collections.singletonList(map5SeqChildren));
+
+    SortedMap<Integer, ExpectedNode> map5Children =
+        new TreeMap<Integer, ExpectedNode>();
+    map5Children.put(0, map5Seq);
+
+    ExpectedNode map5 =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            1,
+            1,
+            Collections.singletonList(map5Children));
+    map5.setElemQName(new QName(TESTSCHEMA_NS, "map"));
+
+    SortedMap<Integer, ExpectedNode> map5SubstGrpChildren =
+        new TreeMap<Integer, ExpectedNode>();
+    map5SubstGrpChildren.put(1, map5);
+
+    ExpectedNode map5SubstGrp =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.SUBSTITUTION_GROUP,
+            1,
+            1,
+            Collections.singletonList(map5SubstGrpChildren));
+
+    // map 3
+    ArrayList<SortedMap<Integer, ExpectedNode>> map3ChoiceChildren =
+        new ArrayList<SortedMap<Integer, ExpectedNode>>();
+
+    SortedMap<Integer, ExpectedNode> map3Child1 =
+        new TreeMap<Integer, ExpectedNode>();
+    map3Child1.put(0, primitive);
+
+    SortedMap<Integer, ExpectedNode> map3Child2 =
+        new TreeMap<Integer, ExpectedNode>();
+    map3Child2.put(2, map4SubstGrp);
+
+    SortedMap<Integer, ExpectedNode> map3Child3 =
+        new TreeMap<Integer, ExpectedNode>();
+    map3Child3.put(2, map5SubstGrp);
+
+    map3ChoiceChildren.add(map3Child1);
+    map3ChoiceChildren.add(map3Child2);
+    map3ChoiceChildren.add(map3Child3);
+
+    ExpectedNode map3Choice =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.CHOICE,
+            0,
+            Long.MAX_VALUE,
+            map3ChoiceChildren);
+
+    SortedMap<Integer, ExpectedNode> map3SeqChildren =
+        new TreeMap<Integer, ExpectedNode>();
+    map3SeqChildren.put(0, map3Choice);
+
+    ExpectedNode map3Seq =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.SEQUENCE,
+            1,
+            1,
+            Collections.singletonList(map3SeqChildren));
+
+    SortedMap<Integer, ExpectedNode> map3Children =
+        new TreeMap<Integer, ExpectedNode>();
+    map3Children.put(0, map3Seq);
+
+    ExpectedNode map3 =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            1,
+            1,
+            Collections.singletonList(map3Children));
+    map3.setElemQName(new QName(TESTSCHEMA_NS, "map"));
+
+    SortedMap<Integer, ExpectedNode> map3SubstGrpChildren =
+        new TreeMap<Integer, ExpectedNode>();
+    map3SubstGrpChildren.put(1, map3);
+
+    ExpectedNode map3SubstGrp =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.SUBSTITUTION_GROUP,
+            1,
+            1,
+            Collections.singletonList(map3SubstGrpChildren));
+
+    SortedMap<Integer, ExpectedNode> choiceMap3Child =
+        new TreeMap<Integer, ExpectedNode>();
+    choiceMap3Child.put(2, map3SubstGrp);
+
+    // avro:record
+    SortedMap<Integer, ExpectedNode> recordChoiceChildren =
+        new TreeMap<Integer, ExpectedNode>();
+    recordChoiceChildren.put(1, nonNullPrimitive);
+
+    ExpectedNode recordChoice =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.CHOICE,
+            0,
+            Long.MAX_VALUE,
+            Collections.singletonList(recordChoiceChildren));
+
+    SortedMap<Integer, ExpectedNode> recordSeqChildren =
+        new TreeMap<Integer, ExpectedNode>();
+    recordSeqChildren.put(0, recordChoice);
+
+    ExpectedNode recordSeq =
+      new ExpectedNode(
+              XmlSchemaStateMachineNode.Type.SEQUENCE,
+              1,
+              1,
+              Collections.singletonList(recordSeqChildren));
+
+    SortedMap<Integer, ExpectedNode> recordChildren =
+        new TreeMap<Integer, ExpectedNode>();
+    recordChildren.put(0, recordSeq);
+
+    ExpectedNode record =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            1,
+            1,
+            Collections.singletonList(recordChildren));
+    record.setElemQName(new QName(TESTSCHEMA_NS, "record"));
+
+    SortedMap<Integer, ExpectedNode> recordSubstGrpChildren =
+        new TreeMap<Integer, ExpectedNode>();
+    recordSubstGrpChildren.put(0, record);
+
+    ExpectedNode recordSubstGrp =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.SUBSTITUTION_GROUP,
+            1,
+            1,
+            Collections.singletonList(recordSubstGrpChildren));
+
+    SortedMap<Integer, ExpectedNode> choiceRecordChild =
+        new TreeMap<Integer, ExpectedNode>();
+    choiceRecordChild.put(2, recordSubstGrp);
+
+    // root
+    ArrayList<SortedMap<Integer, ExpectedNode>> choiceChildren =
+        new ArrayList<SortedMap<Integer, ExpectedNode>>();
+
+    choiceChildren.add(choicePrimitiveChild);
+    choiceChildren.add(choiceNonNullPrimitiveChild);
+    choiceChildren.add(choiceMap1Child);
+    choiceChildren.add(choiceMap2Child);
+    choiceChildren.add(choiceRecordChild);
+    choiceChildren.add(choiceMap3Child);
+    choiceChildren.add(choiceNonNullPrimitiveChild);
+    choiceChildren.add(choiceNonNullPrimitiveChild);
+
+    ExpectedNode choiceNode =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.CHOICE,
+            0L,
+            Long.MAX_VALUE,
+            choiceChildren);
+
+    TreeMap<Integer, ExpectedNode> sequenceChild =
+        new TreeMap<Integer, ExpectedNode>();
+    sequenceChild.put(0, choiceNode);
+
+    ExpectedNode sequenceNode =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.SEQUENCE,
+            1,
+            1,
+            Collections.<SortedMap<Integer, ExpectedNode>>singletonList(
+                sequenceChild));
+
+    TreeMap<Integer, ExpectedNode> rootChild =
+        new TreeMap<Integer, ExpectedNode>();
+    rootChild.put(0, sequenceNode);
+
+    ExpectedNode rootNode =
+        new ExpectedNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            1,
+            1,
+            Collections.<SortedMap<Integer, ExpectedNode>>singletonList(
+                rootChild));
+    rootNode.setElemQName(
+        new QName(TESTSCHEMA_NS, "root"));
+
+    ExpectedNode.validate(
+        root.toString(),
+        rootNode,
+        traversal.getDocumentNode(),
+        null);
+
   }
 
   @Test

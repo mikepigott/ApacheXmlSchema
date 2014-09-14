@@ -36,6 +36,7 @@ public class ExpectedNode {
   private long minOccurs;
   private long maxOccurs;
   private List<SortedMap<Integer, ExpectedNode>> children;
+  private QName elemQName;
 
   ExpectedNode(
       XmlSchemaStateMachineNode.Type nodeType,
@@ -47,6 +48,10 @@ public class ExpectedNode {
     this.minOccurs = minOccurs;
     this.maxOccurs = maxOccurs;
     this.children = children;
+  }
+
+  void setElemQName(QName elemQName) {
+    this.elemQName = elemQName;
   }
 
   static void validate(
@@ -64,18 +69,20 @@ public class ExpectedNode {
     assertEquals(msg, exp.maxOccurs, docNode.getMaxOccurs());
     assertEquals(msg, exp.children.size(), docNode.getIteration());
 
-    /* TODO
     if (docNode
           .getStateMachineNode()
           .getNodeType()
           .equals(XmlSchemaStateMachineNode.Type.ELEMENT)) {
 
       QName actQName = docNode.getStateMachineNode().getElement().getQName();
+      assertEquals(msg, exp.elemQName, actQName);
+
+      /*
       ExpectedElement expElem = expElements.get(actQName);
       assertNotNull(msg, expElem);
       expElem.validate(docNode);
+      */
     }
-    */
 
     for (int iteration = 1; iteration <= docNode.getIteration(); ++iteration) {
       SortedMap<Integer, ExpectedNode> expected =
