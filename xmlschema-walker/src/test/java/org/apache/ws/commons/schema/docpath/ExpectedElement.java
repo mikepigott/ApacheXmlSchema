@@ -41,6 +41,10 @@ class ExpectedElement {
 
     XmlSchemaTypeInfo actType = docNode.getStateMachineNode().getElementType();
 
+    validate(qName, actType);
+  }
+
+  void validate(String qName, XmlSchemaTypeInfo actType) {
     assertEquals(qName, typeInfo.getType(), actType.getType());
     assertEquals(qName, typeInfo.getBaseType(), actType.getBaseType());
 
