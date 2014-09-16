@@ -70,5 +70,10 @@ class ExpectedStateMachineNode {
           expElemQName.toString(),
           actualNode.getElementType());
     }
+
+    assertEquals(
+        expNodeType.name() + " number of children",
+        expNextStates.size(),
+        actualNode.getPossibleNextStates().size());
   }
 }

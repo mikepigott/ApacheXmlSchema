@@ -19,8 +19,6 @@
 
 package org.apache.ws.commons.schema.docpath;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -32,7 +30,9 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.ws.commons.schema.XmlSchemaCollection;
 import org.apache.ws.commons.schema.XmlSchemaElement;
 import org.apache.ws.commons.schema.testutils.UtilsForTests;
+import org.apache.ws.commons.schema.walker.XmlSchemaTypeInfo;
 import org.apache.ws.commons.schema.walker.XmlSchemaWalker;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestXmlSchemaStateMachineGenerator {
@@ -40,7 +40,7 @@ public class TestXmlSchemaStateMachineGenerator {
   private static final String TESTSCHEMA_NS = "http://avro.apache.org/AvroTest";
   private static final String COMPLEX_SCHEMA_NS = "urn:avro:complex_schema";
 
-  @Test
+  @Test @Ignore
   public void testSchema() throws IOException {
     final File schemaFile =
         UtilsForTests.buildFile("src", "test", "resources", "test_schema.xsd");
@@ -49,9 +49,21 @@ public class TestXmlSchemaStateMachineGenerator {
         buildSchema(schemaFile, new QName(TESTSCHEMA_NS, "root"));
 
     HashSet<QName> seen = new HashSet<QName>();
+
+    ExpectedElement rootElem =
+        new ExpectedElement(
+            new XmlSchemaTypeInfo(false));
+
+    ExpectedStateMachineNode rootState =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            new QName(TESTSCHEMA_NS, "root"),
+            rootElem);
+
+    validate(rootState, stateMachine, seen);
   }
 
-  @Test
+  @Test @Ignore
   public void testComplex() throws IOException {
     final File schemaFile =
         UtilsForTests.buildFile(
@@ -64,6 +76,14 @@ public class TestXmlSchemaStateMachineGenerator {
         buildSchema(schemaFile, new QName(COMPLEX_SCHEMA_NS, "root"));
 
     HashSet<QName> seen = new HashSet<QName>();
+
+    ExpectedStateMachineNode rootSubstGrp =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.SUBSTITUTION_GROUP,
+            null,
+            null);
+
+    validate(rootSubstGrp, stateMachine, seen);
   }
 
   private XmlSchemaStateMachineNode buildSchema(File schemaFile, QName root)
@@ -92,5 +112,37 @@ public class TestXmlSchemaStateMachineGenerator {
     walker.walk(rootElement);
 
     return stateMachineGen.getStartNode();
+  }
+
+  private void validate(
+      ExpectedStateMachineNode exp,
+      XmlSchemaStateMachineNode act,
+      HashSet<QName> seen) {
+
+    exp.validate(act);
+
+    if (exp.expNodeType.equals(XmlSchemaStateMachineNode.Type.ELEMENT)) {
+      /* The state machine may fold back onto itself if an element is a child
+       * of itself.  Likewise, we need to keep track of what we've seen so we
+       * do not traverse state machine nodes again.
+       */
+      seen.add(exp.expElemQName);
+    }
+
+    for (int idx = 0; idx < exp.expNextStates.size(); ++idx) {
+      ExpectedStateMachineNode expNext = exp.expNextStates.get(idx);
+      XmlSchemaStateMachineNode actNext = act.getPossibleNextStates().get(idx);
+
+      if (expNext.expNodeType.equals(XmlSchemaStateMachineNode.Type.ELEMENT)
+          && seen.contains(expNext.expElemQName)) {
+
+        // We've seen this one; no need to follow it.
+        expNext.validate(actNext);
+        continue;
+      }
+
+      validate(expNext, actNext, seen);
+    }
+
   }
 }
