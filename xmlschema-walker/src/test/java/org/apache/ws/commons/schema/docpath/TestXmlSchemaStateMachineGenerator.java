@@ -30,6 +30,7 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.ws.commons.schema.XmlSchemaCollection;
 import org.apache.ws.commons.schema.XmlSchemaElement;
 import org.apache.ws.commons.schema.testutils.UtilsForTests;
+import org.apache.ws.commons.schema.walker.XmlSchemaBaseSimpleType;
 import org.apache.ws.commons.schema.walker.XmlSchemaTypeInfo;
 import org.apache.ws.commons.schema.walker.XmlSchemaWalker;
 import org.junit.Ignore;
@@ -40,7 +41,7 @@ public class TestXmlSchemaStateMachineGenerator {
   private static final String TESTSCHEMA_NS = "http://avro.apache.org/AvroTest";
   private static final String COMPLEX_SCHEMA_NS = "urn:avro:complex_schema";
 
-  @Test @Ignore
+  @Test
   public void testSchema() throws IOException {
     final File schemaFile =
         UtilsForTests.buildFile("src", "test", "resources", "test_schema.xsd");
@@ -50,6 +51,7 @@ public class TestXmlSchemaStateMachineGenerator {
 
     HashSet<QName> seen = new HashSet<QName>();
 
+    // avro:root
     ExpectedElement rootElem =
         new ExpectedElement(
             new XmlSchemaTypeInfo(false));
@@ -59,6 +61,144 @@ public class TestXmlSchemaStateMachineGenerator {
             XmlSchemaStateMachineNode.Type.ELEMENT,
             new QName(TESTSCHEMA_NS, "root"),
             rootElem);
+
+    ExpectedStateMachineNode groupSequence =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.SEQUENCE,
+            null,
+            null);
+
+    rootState.addNextState(groupSequence);
+
+    ExpectedStateMachineNode groupChoice =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.CHOICE,
+            null,
+            null);
+
+    groupSequence.addNextState(groupChoice);
+
+    // avro:primitive
+    ExpectedElement primitiveElem =
+        new ExpectedElement(
+            new XmlSchemaTypeInfo(XmlSchemaBaseSimpleType.STRING));
+
+    QName primitiveQName = new QName(TESTSCHEMA_NS, "primitive");
+
+    ExpectedStateMachineNode primitiveState =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            primitiveQName,
+            primitiveElem);
+
+    groupChoice.addNextState(primitiveState);
+
+    // avro:nonNullPrimitive
+    ExpectedElement nonNullPrimitiveElem =
+        new ExpectedElement(
+            new XmlSchemaTypeInfo(XmlSchemaBaseSimpleType.STRING));
+
+    QName nonNullPrimitiveQName = new QName(TESTSCHEMA_NS, "nonNullPrimitive");
+
+    ExpectedStateMachineNode nonNullPrimitiveState =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            nonNullPrimitiveQName,
+            nonNullPrimitiveElem);
+
+    groupChoice.addNextState(nonNullPrimitiveState);
+
+    // avro:record
+    ExpectedElement recordElem =
+        new ExpectedElement(new XmlSchemaTypeInfo(false));
+
+    QName recordQName = new QName(TESTSCHEMA_NS, "record");
+
+    ExpectedStateMachineNode recordState =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            recordQName,
+            recordElem);
+
+    recordState.addNextState(groupSequence);
+
+    // avro:map
+    ExpectedElement mapElem =
+        new ExpectedElement(new XmlSchemaTypeInfo(false));
+
+    QName mapQName = new QName(TESTSCHEMA_NS, "map");
+
+    ExpectedStateMachineNode mapState =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            mapQName,
+            mapElem);
+
+    mapState.addNextState(groupSequence);
+
+    ExpectedStateMachineNode recordSubstGrp =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.SUBSTITUTION_GROUP,
+            null,
+            null);
+
+    recordSubstGrp.addNextState(recordState);
+    recordSubstGrp.addNextState(mapState);
+
+    groupChoice.addNextState(recordSubstGrp);
+
+    // avro:list
+    ExpectedElement listElem =
+        new ExpectedElement(new XmlSchemaTypeInfo(false));
+
+    QName listQName = new QName(TESTSCHEMA_NS, "list");
+
+    ExpectedStateMachineNode listState =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            listQName,
+            listElem);
+
+    groupChoice.addNextState(listState);
+
+    ExpectedStateMachineNode listChoice =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.CHOICE,
+            null,
+            null);
+
+    listChoice.addNextState(primitiveState);
+    listChoice.addNextState(recordSubstGrp);
+
+    listState.addNextState(listChoice);
+
+    // avro:tuple
+    ExpectedElement tupleElem =
+        new ExpectedElement(
+            new XmlSchemaTypeInfo(false));
+
+    QName tupleQName = new QName(TESTSCHEMA_NS, "tuple");
+
+    ExpectedStateMachineNode tupleState =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            tupleQName,
+            tupleElem);
+
+    groupChoice.addNextState(tupleState);
+
+    ExpectedStateMachineNode groupOfAll =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.ALL,
+            null,
+            null);
+
+    groupOfAll.addNextState(primitiveState);
+    groupOfAll.addNextState(nonNullPrimitiveState);
+    groupOfAll.addNextState(recordSubstGrp);
+    groupOfAll.addNextState(listState);
+
+    tupleState.addNextState(groupOfAll);
 
     validate(rootState, stateMachine, seen);
   }
