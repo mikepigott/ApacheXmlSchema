@@ -22,6 +22,7 @@ package org.apache.ws.commons.schema.docpath;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import javax.xml.namespace.QName;
@@ -33,7 +34,6 @@ import org.apache.ws.commons.schema.testutils.UtilsForTests;
 import org.apache.ws.commons.schema.walker.XmlSchemaBaseSimpleType;
 import org.apache.ws.commons.schema.walker.XmlSchemaTypeInfo;
 import org.apache.ws.commons.schema.walker.XmlSchemaWalker;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestXmlSchemaStateMachineGenerator {
@@ -203,7 +203,7 @@ public class TestXmlSchemaStateMachineGenerator {
     validate(rootState, stateMachine, seen);
   }
 
-  @Test @Ignore
+  @Test
   public void testComplex() throws IOException {
     final File schemaFile =
         UtilsForTests.buildFile(
@@ -222,6 +222,389 @@ public class TestXmlSchemaStateMachineGenerator {
             XmlSchemaStateMachineNode.Type.SUBSTITUTION_GROUP,
             null,
             null);
+
+    // realRoot
+    ExpectedElement realRootElem =
+        new ExpectedElement(new XmlSchemaTypeInfo(false));
+
+    QName realRootQName = new QName(COMPLEX_SCHEMA_NS, "realRoot");
+
+    ExpectedStateMachineNode realRootState =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            realRootQName,
+            realRootElem);
+
+    ExpectedStateMachineNode realRootSeq =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.SEQUENCE,
+            null,
+            null);
+
+    // backtrack
+    ExpectedElement backtrackElem =
+        new ExpectedElement(new XmlSchemaTypeInfo(false));
+
+    QName backtrackQName = new QName(COMPLEX_SCHEMA_NS, "backtrack");
+
+    ExpectedStateMachineNode backtrackState =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            backtrackQName,
+            backtrackElem);
+
+    ExpectedStateMachineNode backtrackSeq =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.SEQUENCE,
+            null,
+            null);
+
+    ExpectedStateMachineNode backtrackChoice =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.CHOICE,
+            null,
+            null);
+
+    ExpectedStateMachineNode backtrackChoiceChoice =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.CHOICE,
+            null,
+            null);
+
+    // avro:qName
+    ExpectedElement qNameElem =
+        new ExpectedElement(
+            new XmlSchemaTypeInfo(XmlSchemaBaseSimpleType.QNAME));
+
+    QName qNameQName = new QName(COMPLEX_SCHEMA_NS, "qName");
+
+    ExpectedStateMachineNode qNameState =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            qNameQName,
+            qNameElem);
+
+    // avro:avroEnum
+    ExpectedElement avroEnumElem =
+        new ExpectedElement(
+            new XmlSchemaTypeInfo(XmlSchemaBaseSimpleType.STRING));
+
+    QName avroEnumQName = new QName(COMPLEX_SCHEMA_NS, "avroEnum");
+
+    ExpectedStateMachineNode avroEnumState =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            avroEnumQName,
+            avroEnumElem);
+
+    // avro:xmlEnum
+    ExpectedElement xmlEnumElem =
+        new ExpectedElement(
+            new XmlSchemaTypeInfo(XmlSchemaBaseSimpleType.STRING));
+
+    QName xmlEnumQName = new QName(COMPLEX_SCHEMA_NS, "xmlEnum");
+
+    ExpectedStateMachineNode xmlEnumState =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            xmlEnumQName,
+            xmlEnumElem);
+
+    ExpectedStateMachineNode backtrackChoiceSequence =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.SEQUENCE,
+            null,
+            null);
+
+    // avro:unsignedLongList
+    ExpectedElement unsignedLongListElem =
+        new ExpectedElement(
+            new XmlSchemaTypeInfo(
+                new XmlSchemaTypeInfo(XmlSchemaBaseSimpleType.DECIMAL)));
+
+    QName unsignedLongListQName =
+        new QName(COMPLEX_SCHEMA_NS, "unsignedLongList");
+
+    ExpectedStateMachineNode unsignedLongListState =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            unsignedLongListQName,
+            unsignedLongListElem);
+
+    ExpectedStateMachineNode backtrackSeqSequence =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.SEQUENCE,
+            null,
+            null);
+
+    // listOfUnion
+    ArrayList<XmlSchemaTypeInfo> unionForListOfUnion =
+        new ArrayList<XmlSchemaTypeInfo>();
+    unionForListOfUnion.add(
+        new XmlSchemaTypeInfo(XmlSchemaBaseSimpleType.BOOLEAN));
+    unionForListOfUnion.add(
+        new XmlSchemaTypeInfo(XmlSchemaBaseSimpleType.STRING));
+    unionForListOfUnion.add(
+        new XmlSchemaTypeInfo(XmlSchemaBaseSimpleType.DECIMAL));
+    unionForListOfUnion.add(
+        new XmlSchemaTypeInfo(XmlSchemaBaseSimpleType.DECIMAL));
+
+    ExpectedElement listOfUnionElem =
+        new ExpectedElement(
+            new XmlSchemaTypeInfo(
+                new XmlSchemaTypeInfo(unionForListOfUnion)));
+
+    QName listOfUnionQName = new QName(COMPLEX_SCHEMA_NS, "listOfUnion");
+
+    ExpectedStateMachineNode listOfUnionState =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            listOfUnionQName,
+            listOfUnionElem);
+
+    // avro:allTheThings
+    ExpectedElement allTheThingsElem =
+        new ExpectedElement(new XmlSchemaTypeInfo(false));
+
+    QName allTheThingsQName = new QName(COMPLEX_SCHEMA_NS, "allTheThings");
+
+    ExpectedStateMachineNode allTheThingsState =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            allTheThingsQName,
+            allTheThingsElem);
+
+    ExpectedStateMachineNode allTheThingsAll =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.ALL,
+            null,
+            null);
+
+    // firstMap
+    ExpectedElement firstMapElem =
+        new ExpectedElement(new XmlSchemaTypeInfo(false));
+
+    QName firstMapQName = new QName(COMPLEX_SCHEMA_NS, "firstMap");
+
+    ExpectedStateMachineNode firstMapState =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            firstMapQName,
+            firstMapElem);
+
+    ExpectedStateMachineNode firstMapSeq =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.SEQUENCE,
+            null,
+            null);
+
+    // value
+    ExpectedElement valueElem =
+        new ExpectedElement(
+            new XmlSchemaTypeInfo(XmlSchemaBaseSimpleType.DECIMAL));
+
+    QName valueQName = new QName(COMPLEX_SCHEMA_NS, "value");
+
+    ExpectedStateMachineNode valueState =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            valueQName,
+            valueElem);
+
+    // secondMap
+    ExpectedElement secondMapElem =
+        new ExpectedElement(
+            new XmlSchemaTypeInfo(false));
+
+    QName secondMapQName = new QName(COMPLEX_SCHEMA_NS, "secondMap");
+
+    ExpectedStateMachineNode secondMapState =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            secondMapQName,
+            secondMapElem);
+
+    // prohibit
+    ExpectedElement prohibitElem =
+        new ExpectedElement(new XmlSchemaTypeInfo(false));
+
+    QName prohibitQName = new QName(COMPLEX_SCHEMA_NS, "prohibit");
+
+    ExpectedStateMachineNode prohibitState =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            prohibitQName,
+            prohibitElem);
+
+    ExpectedStateMachineNode prohibitSeq =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.SEQUENCE,
+            null,
+            null);
+
+    // fixed
+    ExpectedElement fixedElem =
+        new ExpectedElement(
+            new XmlSchemaTypeInfo(XmlSchemaBaseSimpleType.DECIMAL));
+
+    QName fixedQName = new QName(COMPLEX_SCHEMA_NS, "fixed");
+
+    ExpectedStateMachineNode fixedState =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            fixedQName,
+            fixedElem);
+
+    // avro:anyAndFriends
+    ExpectedElement anyAndFriendsElem =
+        new ExpectedElement(new XmlSchemaTypeInfo(true));
+
+    QName anyAndFriendsQName = new QName(COMPLEX_SCHEMA_NS, "anyAndFriends");
+
+    ExpectedStateMachineNode anyAndFriendsState =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            anyAndFriendsQName,
+            anyAndFriendsElem);
+
+    ExpectedStateMachineNode anyAndFriendsSeq =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.SEQUENCE,
+            null,
+            null);
+
+    ExpectedStateMachineNode anyState =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.ANY,
+            null,
+            null);
+
+    // avro:simpleExtension
+    ArrayList<XmlSchemaTypeInfo> baseUnion =
+        new ArrayList<XmlSchemaTypeInfo>();
+    baseUnion.add(new XmlSchemaTypeInfo(XmlSchemaBaseSimpleType.BOOLEAN));
+    baseUnion.add(new XmlSchemaTypeInfo(XmlSchemaBaseSimpleType.DECIMAL));
+
+    ExpectedElement simpleExtensionElem =
+        new ExpectedElement(new XmlSchemaTypeInfo(baseUnion));
+
+    QName simpleExtensionQName =
+        new QName(COMPLEX_SCHEMA_NS, "simpleExtension");
+
+    ExpectedStateMachineNode simpleExtensionState =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            simpleExtensionQName,
+            simpleExtensionElem);
+
+    // simpleRestriction
+    QName simpleRestrictionQName =
+        new QName(COMPLEX_SCHEMA_NS, "simpleRestriction");
+
+    ExpectedStateMachineNode simpleRestrictionState =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            simpleRestrictionQName,
+            simpleExtensionElem);
+
+    // complexExtension
+    ExpectedElement complexExtensionElem =
+        new ExpectedElement(new XmlSchemaTypeInfo(false));
+
+    QName complexExtensionQName =
+        new QName(COMPLEX_SCHEMA_NS, "complexExtension");
+
+    ExpectedStateMachineNode complexExtensionState =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            complexExtensionQName,
+            complexExtensionElem);
+
+    ExpectedStateMachineNode complexExtensionSeq =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.SEQUENCE,
+            null,
+            null);
+
+    ExpectedStateMachineNode complexExtensionSeqChoice =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.CHOICE,
+            null,
+            null);
+
+    ExpectedStateMachineNode complexExtensionSeqSequence =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.SEQUENCE,
+            null,
+            null);
+
+    // avro:mixedType
+    ExpectedElement mixedTypeElem =
+        new ExpectedElement(new XmlSchemaTypeInfo(true));
+
+    QName mixedTypeQName = new QName(COMPLEX_SCHEMA_NS, "mixedType");
+
+    ExpectedStateMachineNode mixedTypeState =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.ELEMENT,
+            mixedTypeQName,
+            mixedTypeElem);
+
+    ExpectedStateMachineNode mixedTypeSeq =
+        new ExpectedStateMachineNode(
+            XmlSchemaStateMachineNode.Type.SEQUENCE,
+            null,
+            null);
+
+    // Indentation follows schema
+    rootSubstGrp.addNextState(realRootState);
+      realRootState.addNextState(realRootSeq);
+        realRootSeq.addNextState(backtrackState);
+          backtrackState.addNextState(backtrackSeq);
+            backtrackSeq.addNextState(backtrackChoice);
+              backtrackChoice.addNextState(backtrackChoiceChoice);
+                backtrackChoiceChoice.addNextState(qNameState);
+                backtrackChoiceChoice.addNextState(avroEnumState);
+                backtrackChoiceChoice.addNextState(xmlEnumState);
+              backtrackChoice.addNextState(backtrackChoiceSequence);
+                backtrackChoiceSequence.addNextState(xmlEnumState);
+                backtrackChoiceSequence.addNextState(unsignedLongListState);
+            backtrackSeq.addNextState(backtrackSeqSequence);
+              backtrackSeqSequence.addNextState(qNameState);
+              backtrackSeqSequence.addNextState(avroEnumState);
+              backtrackSeqSequence.addNextState(xmlEnumState);
+              backtrackSeqSequence.addNextState(unsignedLongListState);
+              backtrackSeqSequence.addNextState(listOfUnionState);
+        realRootSeq.addNextState(allTheThingsState);
+          allTheThingsState.addNextState(allTheThingsAll);
+            allTheThingsAll.addNextState(firstMapState);
+              firstMapState.addNextState(firstMapSeq);
+                firstMapSeq.addNextState(valueState);
+            allTheThingsAll.addNextState(secondMapState);
+        realRootSeq.addNextState(prohibitState);
+          prohibitState.addNextState(prohibitSeq);
+            prohibitSeq.addNextState(fixedState);
+        realRootSeq.addNextState(anyAndFriendsState);
+          anyAndFriendsState.addNextState(anyAndFriendsSeq);
+            anyAndFriendsSeq.addNextState(anyState);
+            anyAndFriendsSeq.addNextState(anyState);
+            anyAndFriendsSeq.addNextState(anyState);
+            anyAndFriendsSeq.addNextState(anyState);
+            anyAndFriendsSeq.addNextState(anyState);
+            anyAndFriendsSeq.addNextState(anyState);
+        realRootSeq.addNextState(simpleExtensionState);
+        realRootSeq.addNextState(simpleRestrictionState);
+        realRootSeq.addNextState(complexExtensionState);
+          complexExtensionState.addNextState(complexExtensionSeq);
+            complexExtensionSeq.addNextState(complexExtensionSeqSequence);
+              complexExtensionSeqSequence.addNextState(fixedState);
+            complexExtensionSeq.addNextState(complexExtensionSeqChoice);
+              complexExtensionSeqChoice.addNextState(listOfUnionState);
+              complexExtensionSeqChoice.addNextState(unsignedLongListState);
+        realRootSeq.addNextState(mixedTypeState);
+          mixedTypeState.addNextState(mixedTypeSeq);
+            mixedTypeSeq.addNextState(listOfUnionState);
+            mixedTypeSeq.addNextState(unsignedLongListState);
 
     validate(rootSubstGrp, stateMachine, seen);
   }
