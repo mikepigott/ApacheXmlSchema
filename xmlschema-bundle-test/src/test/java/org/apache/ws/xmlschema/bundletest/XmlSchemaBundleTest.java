@@ -20,32 +20,29 @@
 package org.apache.ws.xmlschema.bundletest;
 
 import junit.framework.Assert;
+
 import org.apache.ws.commons.schema.XmlSchemaCollection;
 import org.apache.ws.commons.schema.internal.DummyInternalClass;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.ops4j.pax.exam.Configuration;
 import org.ops4j.pax.exam.CoreOptions;
-import org.ops4j.pax.exam.Inject;
 import org.ops4j.pax.exam.Option;
-import org.ops4j.pax.exam.junit.Configuration;
-import org.ops4j.pax.exam.junit.JUnit4TestRunner;
-import org.osgi.framework.BundleContext;
-
+import org.ops4j.pax.exam.junit.PaxExam;
 
 /**
  *
  */
-@RunWith(JUnit4TestRunner.class)
+@RunWith(PaxExam.class)
 public class XmlSchemaBundleTest {
 
     @Configuration
-    public static Option[] configuration()
-    {
-       return CoreOptions.options(CoreOptions.felix(), CoreOptions.provision(
-         CoreOptions.mavenBundle().groupId("org.apache.ws.xmlschema").artifactId("xmlschema-core")
-       ));
+    public static Option[] configuration() {
+        return CoreOptions.options(CoreOptions.junitBundles(),
+                                   CoreOptions.provision(CoreOptions.mavenBundle()
+                                       .groupId("org.apache.ws.xmlschema").artifactId("xmlschema-core")));
     }
 
     @Test(expected = java.lang.NoClassDefFoundError.class)

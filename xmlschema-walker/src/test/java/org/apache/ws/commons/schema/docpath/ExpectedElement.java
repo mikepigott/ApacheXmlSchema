@@ -24,33 +24,29 @@ import org.apache.ws.commons.schema.walker.XmlSchemaTypeInfo;
 import static org.junit.Assert.*;
 
 /**
- * This is a simpler representation of an XML
- * element to facilitate easier testing.
+ * This is a simpler representation of an XML element to facilitate easier
+ * testing.
  */
 class ExpectedElement {
 
-  private XmlSchemaTypeInfo typeInfo;
+    private XmlSchemaTypeInfo typeInfo;
 
-  ExpectedElement(XmlSchemaTypeInfo typeInfo) {
-    this.typeInfo = typeInfo;
-  }
+    ExpectedElement(XmlSchemaTypeInfo typeInfo) {
+        this.typeInfo = typeInfo;
+    }
 
-  void validate(XmlSchemaDocumentNode docNode) {
-    String qName =
-        docNode.getStateMachineNode().getElement().getQName().toString();
+    void validate(XmlSchemaDocumentNode docNode) {
+        String qName = docNode.getStateMachineNode().getElement().getQName().toString();
 
-    XmlSchemaTypeInfo actType = docNode.getStateMachineNode().getElementType();
+        XmlSchemaTypeInfo actType = docNode.getStateMachineNode().getElementType();
 
-    validate(qName, actType);
-  }
+        validate(qName, actType);
+    }
 
-  void validate(String qName, XmlSchemaTypeInfo actType) {
-    assertEquals(qName, typeInfo.getType(), actType.getType());
-    assertEquals(qName, typeInfo.getBaseType(), actType.getBaseType());
+    void validate(String qName, XmlSchemaTypeInfo actType) {
+        assertEquals(qName, typeInfo.getType(), actType.getType());
+        assertEquals(qName, typeInfo.getBaseType(), actType.getBaseType());
 
-    assertEquals(
-        qName,
-        typeInfo.getUserRecognizedType(),
-        actType.getUserRecognizedType());
-  }
+        assertEquals(qName, typeInfo.getUserRecognizedType(), actType.getUserRecognizedType());
+    }
 }

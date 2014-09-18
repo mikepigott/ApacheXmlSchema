@@ -26,54 +26,36 @@ import java.util.List;
 import javax.xml.namespace.QName;
 
 class ExpectedStateMachineNode {
-  XmlSchemaStateMachineNode.Type expNodeType;
-  ExpectedElement expElem;
-  QName expElemQName;
-  List<ExpectedStateMachineNode> expNextStates;
+    XmlSchemaStateMachineNode.Type expNodeType;
+    ExpectedElement expElem;
+    QName expElemQName;
+    List<ExpectedStateMachineNode> expNextStates;
 
-  ExpectedStateMachineNode(
-      XmlSchemaStateMachineNode.Type expNodeType,
-      QName expElemQName,
-      ExpectedElement expElem) {
-    this.expNodeType = expNodeType;
-    this.expElem = expElem;
-    this.expElemQName = expElemQName;
-    this.expNextStates =
-        new java.util.ArrayList<ExpectedStateMachineNode>();
-  }
-
-  void addNextState(ExpectedStateMachineNode expNextState) {
-    expNextStates.add(expNextState);
-  }
-
-  void validate(XmlSchemaStateMachineNode actualNode) {
-    assertEquals(
-        "Expected Type: "
-          + expNodeType
-          + "; actual: "
-          + actualNode.getNodeType(),
-        expNodeType,
-        actualNode.getNodeType());
-
-    if (actualNode
-          .getNodeType()
-          .equals(XmlSchemaStateMachineNode.Type.ELEMENT)) {
-      assertEquals(
-          "Expected QName: "
-            + expElemQName
-            + "; actual: "
-            + actualNode.getElement().getQName(),
-          expElemQName,
-          actualNode.getElement().getQName());
-
-      expElem.validate(
-          expElemQName.toString(),
-          actualNode.getElementType());
+    ExpectedStateMachineNode(XmlSchemaStateMachineNode.Type expNodeType, QName expElemQName,
+                             ExpectedElement expElem) {
+        this.expNodeType = expNodeType;
+        this.expElem = expElem;
+        this.expElemQName = expElemQName;
+        this.expNextStates = new java.util.ArrayList<ExpectedStateMachineNode>();
     }
 
-    assertEquals(
-        expNodeType.name() + " number of children",
-        expNextStates.size(),
-        actualNode.getPossibleNextStates().size());
-  }
+    void addNextState(ExpectedStateMachineNode expNextState) {
+        expNextStates.add(expNextState);
+    }
+
+    void validate(XmlSchemaStateMachineNode actualNode) {
+        assertEquals("Expected Type: " + expNodeType + "; actual: " + actualNode.getNodeType(), expNodeType,
+                     actualNode.getNodeType());
+
+        if (actualNode.getNodeType().equals(XmlSchemaStateMachineNode.Type.ELEMENT)) {
+            assertEquals("Expected QName: " + expElemQName + "; actual: "
+                         + actualNode.getElement().getQName(), expElemQName, actualNode.getElement()
+                .getQName());
+
+            expElem.validate(expElemQName.toString(), actualNode.getElementType());
+        }
+
+        assertEquals(expNodeType.name() + " number of children", expNextStates.size(), actualNode
+            .getPossibleNextStates().size());
+    }
 }

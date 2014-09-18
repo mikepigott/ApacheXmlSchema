@@ -38,79 +38,64 @@ import org.w3c.dom.Document;
 
 public class TestDomBuilderFromSax {
 
-  private static final File TEST_SCHEMA =
-      UtilsForTests.buildFile("src", "test", "resources", "test_schema.xsd");
+    private static final File TEST_SCHEMA = UtilsForTests.buildFile("src", "test", "resources",
+                                                                    "test_schema.xsd");
 
-  private static SAXParserFactory spf;
-  private static DocumentBuilderFactory dbf;
+    private static SAXParserFactory spf;
+    private static DocumentBuilderFactory dbf;
 
-  private SAXParser saxParser;
-  private DocumentBuilder domParser;
+    private SAXParser saxParser;
+    private DocumentBuilder domParser;
 
-  @BeforeClass
-  public static void setUpFactories() {
-    dbf = DocumentBuilderFactory.newInstance();
-    dbf.setNamespaceAware(true);
+    @BeforeClass
+    public static void setUpFactories() {
+        dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
 
-    spf = SAXParserFactory.newInstance();
-    spf.setNamespaceAware(true);
-  }
+        spf = SAXParserFactory.newInstance();
+        spf.setNamespaceAware(true);
+    }
 
-  @Before
-  public void setUpTest() throws Exception {
-    saxParser = spf.newSAXParser();
-    domParser = dbf.newDocumentBuilder();
-  }
+    @Before
+    public void setUpTest() throws Exception {
+        saxParser = spf.newSAXParser();
+        domParser = dbf.newDocumentBuilder();
+    }
 
-  @Test
-  public void testRoot() throws Exception {
-    runTest(
-        TEST_SCHEMA,
-        UtilsForTests.buildFile("src", "test", "resources", "test1_root.xml"));
-  }
+    @Test
+    public void testRoot() throws Exception {
+        runTest(TEST_SCHEMA, UtilsForTests.buildFile("src", "test", "resources", "test1_root.xml"));
+    }
 
-  @Test
-  public void testChildren() throws Exception {
-    runTest(
-        TEST_SCHEMA,
-        UtilsForTests.buildFile(
-            "src",
-            "test",
-            "resources",
-            "test2_children.xml"));
-  }
+    @Test
+    public void testChildren() throws Exception {
+        runTest(TEST_SCHEMA, UtilsForTests.buildFile("src", "test", "resources", "test2_children.xml"));
+    }
 
-  @Test
-  public void testGrandchildren() throws Exception {
-    runTest(
-        TEST_SCHEMA,
-        UtilsForTests.buildFile(
-            "src",
-            "test",
-            "resources",
-            "test3_grandchildren.xml"));
-  }
+    @Test
+    public void testGrandchildren() throws Exception {
+        runTest(TEST_SCHEMA, UtilsForTests.buildFile("src", "test", "resources", "test3_grandchildren.xml"));
+    }
 
-  private void runTest(File schemaFile, File xmlFile) throws Exception {
-    XmlSchemaCollection xmlSchemas = new XmlSchemaCollection();
+    private void runTest(File schemaFile, File xmlFile) throws Exception {
+        XmlSchemaCollection xmlSchemas = new XmlSchemaCollection();
 
-    FileReader schemaFileReader = new FileReader(schemaFile);
+        FileReader schemaFileReader = new FileReader(schemaFile);
 
-    StreamSource schemaSource =
-        new StreamSource(schemaFileReader, schemaFile.getName());
-    xmlSchemas.read(schemaSource);
+        StreamSource schemaSource = new StreamSource(schemaFileReader, schemaFile.getName());
+        xmlSchemas.read(schemaSource);
 
-    schemaFileReader.close();
+        schemaFileReader.close();
 
-    // Parse the document using a real DOM parser
-    final Document expectedDoc = domParser.parse(xmlFile);
+        // Parse the document using a real DOM parser
+        final Document expectedDoc = domParser.parse(xmlFile);
 
-    // Parse the document using a SAX parser
-    DomBuilderFromSax builder = new DomBuilderFromSax(xmlSchemas);
-    saxParser.parse(xmlFile, builder);
+        // Parse the document using a SAX parser
+        DomBuilderFromSax builder = new DomBuilderFromSax(xmlSchemas);
+        saxParser.parse(xmlFile, builder);
 
-    final Document actualDoc = builder.getDocument();
+        final Document actualDoc = builder.getDocument();
 
-    UtilsForTests.assertEquivalent(expectedDoc, actualDoc);
-  }
+        UtilsForTests.assertEquivalent(expectedDoc, actualDoc);
+    }
 }

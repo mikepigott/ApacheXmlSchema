@@ -22,38 +22,26 @@ package org.apache.ws.commons.schema.docpath;
 import static org.junit.Assert.*;
 
 /**
- * Represents the expected {@link XmlSchemaPathNode}
- * at a particular link in the chain.
+ * Represents the expected {@link XmlSchemaPathNode} at a particular link in the
+ * chain.
  */
 class ExpectedPathNode {
-  ExpectedNode expDocNode;
-  XmlSchemaPathNode.Direction expDirection;
-  int expIteration;
+    ExpectedNode expDocNode;
+    XmlSchemaPathNode.Direction expDirection;
+    int expIteration;
 
-  ExpectedPathNode(
-      XmlSchemaPathNode.Direction expectedDirection,
-      ExpectedNode expectedDocNode,
-      int expectedIteration) {
-    expDocNode = expectedDocNode;
-    expDirection = expectedDirection;
-    expIteration = expectedIteration;
-  }
+    ExpectedPathNode(XmlSchemaPathNode.Direction expectedDirection, ExpectedNode expectedDocNode,
+                     int expectedIteration) {
+        expDocNode = expectedDocNode;
+        expDirection = expectedDirection;
+        expIteration = expectedIteration;
+    }
 
-  void validate(int pathIndex, XmlSchemaPathNode actualPathNode) {
-    assertEquals(
-        "Path Index: " + pathIndex,
-        expDirection,
-        actualPathNode.getDirection());
+    void validate(int pathIndex, XmlSchemaPathNode actualPathNode) {
+        assertEquals("Path Index: " + pathIndex, expDirection, actualPathNode.getDirection());
 
-    ExpectedNode.validate(
-        "Path Index: " + pathIndex,
-        expDocNode,
-        actualPathNode.getDocumentNode(),
-        null);
+        ExpectedNode.validate("Path Index: " + pathIndex, expDocNode, actualPathNode.getDocumentNode(), null);
 
-    assertEquals(
-        "Path Index: " + pathIndex,
-        expIteration,
-        actualPathNode.getIteration());
-  }
+        assertEquals("Path Index: " + pathIndex, expIteration, actualPathNode.getIteration());
+    }
 }

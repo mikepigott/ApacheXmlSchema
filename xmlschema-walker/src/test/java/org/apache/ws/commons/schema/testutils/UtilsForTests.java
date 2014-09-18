@@ -28,28 +28,26 @@ import org.w3c.dom.Document;
 
 public final class UtilsForTests {
 
-  public static void assertEquivalent(Document expected, Document actual) {
-    XMLUnit.setIgnoreWhitespace(true);
-    XMLUnit.setIgnoreAttributeOrder(true);
+    public static void assertEquivalent(Document expected, Document actual) {
+        XMLUnit.setIgnoreWhitespace(true);
+        XMLUnit.setIgnoreAttributeOrder(true);
 
-    DetailedDiff diff = new DetailedDiff(XMLUnit.compareXML(expected, actual));
+        DetailedDiff diff = new DetailedDiff(XMLUnit.compareXML(expected, actual));
 
-    assertTrue(
-        "Differences found: " + diff.toString(),
-        diff.similar());
-  }
-
-  public static File buildFile(String... parts) {
-    File file = null;
-
-    for (String part : parts) {
-      if (file == null) {
-        file = new File(part);
-      } else {
-        file = new File(file, part);
-      }
+        assertTrue("Differences found: " + diff.toString(), diff.similar());
     }
 
-    return file;
-  }
+    public static File buildFile(String... parts) {
+        File file = null;
+
+        for (String part : parts) {
+            if (file == null) {
+                file = new File(part);
+            } else {
+                file = new File(file, part);
+            }
+        }
+
+        return file;
+    }
 }

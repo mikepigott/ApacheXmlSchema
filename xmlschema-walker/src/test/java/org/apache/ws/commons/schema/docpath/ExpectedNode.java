@@ -32,90 +32,64 @@ import javax.xml.namespace.QName;
  */
 public class ExpectedNode {
 
-  XmlSchemaStateMachineNode.Type nodeType;
-  long minOccurs;
-  long maxOccurs;
-  List<SortedMap<Integer, ExpectedNode>> children;
-  QName elemQName;
+    XmlSchemaStateMachineNode.Type nodeType;
+    long minOccurs;
+    long maxOccurs;
+    List<SortedMap<Integer, ExpectedNode>> children;
+    QName elemQName;
 
-  ExpectedNode(
-      XmlSchemaStateMachineNode.Type nodeType,
-      long minOccurs,
-      long maxOccurs,
-      List<SortedMap<Integer, ExpectedNode>> children) {
+    ExpectedNode(XmlSchemaStateMachineNode.Type nodeType, long minOccurs, long maxOccurs,
+                 List<SortedMap<Integer, ExpectedNode>> children) {
 
-    this.nodeType = nodeType;
-    this.minOccurs = minOccurs;
-    this.maxOccurs = maxOccurs;
-    this.children = children;
-  }
-
-  void setElemQName(QName elemQName) {
-    this.elemQName = elemQName;
-  }
-
-  static void validate(
-      String msg,
-      ExpectedNode exp,
-      XmlSchemaDocumentNode docNode,
-      Map<QName, ExpectedElement> expElements) {
-
-    assertEquals(
-        msg,
-        exp.nodeType,
-        docNode.getStateMachineNode().getNodeType());
-
-    assertEquals(msg, exp.minOccurs, docNode.getMinOccurs());
-    assertEquals(msg, exp.maxOccurs, docNode.getMaxOccurs());
-    assertEquals(msg, exp.children.size(), docNode.getIteration());
-
-    if (docNode
-          .getStateMachineNode()
-          .getNodeType()
-          .equals(XmlSchemaStateMachineNode.Type.ELEMENT)) {
-
-      QName actQName = docNode.getStateMachineNode().getElement().getQName();
-      assertEquals(msg, exp.elemQName, actQName);
-
-      if (expElements != null) {
-        ExpectedElement expElem = expElements.get(actQName);
-        assertNotNull(msg, expElem);
-        expElem.validate(docNode);
-      }
+        this.nodeType = nodeType;
+        this.minOccurs = minOccurs;
+        this.maxOccurs = maxOccurs;
+        this.children = children;
     }
 
-    for (int iteration = 1; iteration <= docNode.getIteration(); ++iteration) {
-      SortedMap<Integer, ExpectedNode> expected =
-          exp.children.get(iteration - 1);
+    void setElemQName(QName elemQName) {
+        this.elemQName = elemQName;
+    }
 
-      SortedMap<Integer, XmlSchemaDocumentNode> actual =
-          docNode.getChildren(iteration);
+    static void validate(String msg, ExpectedNode exp, XmlSchemaDocumentNode docNode,
+                         Map<QName, ExpectedElement> expElements) {
 
-      assertEquals(
-          msg + ", iteration=" + iteration + "; " + exp.nodeType,
-          expected.size(),
-          (actual == null) ? 0 : actual.size());
+        assertEquals(msg, exp.nodeType, docNode.getStateMachineNode().getNodeType());
 
-      if (actual != null) {
-        for (Map.Entry<Integer, XmlSchemaDocumentNode> actEntry
-              : actual.entrySet()) {
-          ExpectedNode expNode = expected.get(actEntry.getKey());
-          assertNotNull(
-              msg + ", iteration=" + iteration + ", child = " + actEntry.getKey() + ": entry " + actEntry.getKey() + " is not expected.",
-              expNode);
-  
-          validate(
-              msg
-                + "\titeration="
-                + iteration
-                + "child="
-                + actEntry.getKey()
-                + " (" + exp.nodeType + ")",
-              expNode,
-              actEntry.getValue(),
-              expElements);
+        assertEquals(msg, exp.minOccurs, docNode.getMinOccurs());
+        assertEquals(msg, exp.maxOccurs, docNode.getMaxOccurs());
+        assertEquals(msg, exp.children.size(), docNode.getIteration());
+
+        if (docNode.getStateMachineNode().getNodeType().equals(XmlSchemaStateMachineNode.Type.ELEMENT)) {
+
+            QName actQName = docNode.getStateMachineNode().getElement().getQName();
+            assertEquals(msg, exp.elemQName, actQName);
+
+            if (expElements != null) {
+                ExpectedElement expElem = expElements.get(actQName);
+                assertNotNull(msg, expElem);
+                expElem.validate(docNode);
+            }
         }
-      }
+
+        for (int iteration = 1; iteration <= docNode.getIteration(); ++iteration) {
+            SortedMap<Integer, ExpectedNode> expected = exp.children.get(iteration - 1);
+
+            SortedMap<Integer, XmlSchemaDocumentNode> actual = docNode.getChildren(iteration);
+
+            assertEquals(msg + ", iteration=" + iteration + "; " + exp.nodeType, expected.size(),
+                         (actual == null) ? 0 : actual.size());
+
+            if (actual != null) {
+                for (Map.Entry<Integer, XmlSchemaDocumentNode> actEntry : actual.entrySet()) {
+                    ExpectedNode expNode = expected.get(actEntry.getKey());
+                    assertNotNull(msg + ", iteration=" + iteration + ", child = " + actEntry.getKey()
+                                  + ": entry " + actEntry.getKey() + " is not expected.", expNode);
+
+                    validate(msg + "\titeration=" + iteration + "child=" + actEntry.getKey() + " ("
+                             + exp.nodeType + ")", expNode, actEntry.getValue(), expElements);
+                }
+            }
+        }
     }
-  }
 }
