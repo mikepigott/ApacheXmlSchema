@@ -354,9 +354,8 @@ public final class XmlSchemaPathFinder<U, V> extends DefaultHandler {
             return new ArrayList<QName>(elementStack);
         }
 
-        @SuppressWarnings("unchecked")
         ArrayList<QName> getAnyStack() {
-            return (anyStack == null) ? null : ((ArrayList<QName>)anyStack.clone());
+            return (anyStack == null) ? null : new ArrayList<QName>(anyStack);
         }
 
         @Override

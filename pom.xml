@@ -28,7 +28,7 @@
     <artifactId>xmlschema</artifactId>
     <packaging>pom</packaging>
     <name>XmlSchema</name>
-    <version>2.2.0-SNAPSHOT</version>
+    <version>2.2.1-SNAPSHOT</version>
     <description>Apache XMLSchema is a light weight schema object model that can be used to manipulate or generate XML schema.</description>
     <url>http://ws.apache.org/commons/xmlschema20/</url>
     <issueManagement>
@@ -82,14 +82,34 @@
     </properties>
     <modules>
         <module>xmlschema-core</module>
+        <module>xmlschema-walker</module>
         <module>xmlschema-bundle-test</module>
         <module>w3c-testcases</module>
-        <module>xmlschema-walker</module>
     </modules>
     <build>
         <defaultGoal>install</defaultGoal>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>maven-bundle-plugin</artifactId>
+                    <version>2.4.0</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <instructions>
+                            <Implementation-Vendor>The Apache Software Foundation</Implementation-Vendor>
+                            <Implementation-Vendor-Id>org.apache</Implementation-Vendor-Id>
+                            <Specification-Vendor>The Apache Software Foundation</Specification-Vendor>
+                            <Bundle-DocURL>http://ws.apache.org/xmlschema/</Bundle-DocURL>
+                            <_failok>true</_failok>
+                            <_nouses>true</_nouses>
+                            <_versionpolicy>[$(version;==;$(@)),$(version;+;$(@)))</_versionpolicy>
+                            <Import-Package>
+                                *
+                            </Import-Package>
+                        </instructions>
+                    </configuration>
+                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
@@ -267,7 +287,7 @@
                 						</goals>
                 					</pluginExecutionFilter>
                 					<action>
-                						<ignore></ignore>
+                						<ignore />
                 					</action>
                 				</pluginExecution>
                 				<pluginExecution>
@@ -286,7 +306,7 @@
                 						</goals>
                 					</pluginExecutionFilter>
                 					<action>
-                						<ignore></ignore>
+                						<ignore />
                 					</action>
                 				</pluginExecution>
                 				<pluginExecution>
@@ -305,7 +325,7 @@
                 						</goals>
                 					</pluginExecutionFilter>
                 					<action>
-                						<ignore></ignore>
+                						<ignore />
                 					</action>
                 				</pluginExecution>
                 			</pluginExecutions>
